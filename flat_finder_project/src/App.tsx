@@ -1,4 +1,4 @@
-
+import AppRouter from './router/routes'
 import './App.css'
 
 function App() {
@@ -6,7 +6,7 @@ function App() {
 
   return (
     <>
-    
+    <AppRouter/>
     </>
   )
 }
