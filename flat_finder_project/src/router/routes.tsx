@@ -2,7 +2,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom"
 import Homepage from "../pages/Homepage"
 import AllUsers from "../pages/AllUsers"
 import Favourites from "../pages/Favourites"
-import FlatView from "../pages/FlatVIew"
+import FlatView from "../pages/FlatView"
 import Login from "../pages/Login"
 import Register from "../pages/Register"
 import MyFlats from "../pages/MyFlats"
@@ -11,7 +11,7 @@ import Profile from "../pages/Profile"
 import ProfileUpdate from "../pages/ProfileUpdate"
 
 
-import (BrowserRouter)
+
 
 const AppRouter = () => {
 const routes = [
