@@ -1,14 +1,21 @@
 import { useState } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
+import { registerUser } from "../api/methods/auth/users";
+import { User } from "../interface";
+import { useNavigate } from "react-router";
+
 
 type FormFields = {
+  uid: string;
   firstName: string;
   lastName: string;
   email: string;
   password: string;
   confirmPassword: string;
-  birthday: string
-}
+  birthday: string;
+  role: "regular";
+  data: User;
+};
 
 const Register = () => {
   const {
@@ -18,35 +25,46 @@ const Register = () => {
     formState: { errors },
   } = useForm<FormFields>();
 
-  const [birthDate, setBirthDate] = useState('')
- 
+  const navigate = useNavigate()
 
-  const onSubmit:SubmitHandler<FormFields> = (data) => {console.log(data)};
+  const [birthDate, setBirthDate] = useState("");
 
-  const password = watch('password')
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    try {
+      await registerUser(data);
+      navigate("/login");
+    } catch (error) {
+      throw new Error(error as string);
+    }
+  };
 
-  function calculateAge(birthDate:string) {
-    const currentDate = new Date()
-    const birthday = new Date(birthDate)
-    const ageInMilliseconds = currentDate.getTime() - birthday.getTime()
-    const ageResult = Math.floor(ageInMilliseconds/(1000*60*60*24*365.25))
+  const password = watch("password");
 
-    return ageResult
+  function calculateAge(birthDate: string) {
+    const currentDate = new Date();
+    const birthday = new Date(birthDate);
+    const ageInMilliseconds = currentDate.getTime() - birthday.getTime();
+    const ageResult = Math.floor(
+      ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25)
+    );
+
+    return ageResult;
   }
 
   // console.log(calculateAge('01.01.1983'))
-  
 
-  const handleInputChange = (e:React.ChangeEvent<HTMLInputElement>) =>
-    {setBirthDate(e.target.value)}
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setBirthDate(e.target.value);
+  };
 
-
-  return (           
+  return (
     <form
       onSubmit={handleSubmit(onSubmit)}
       className="flex flex-col justify-center items-center w-full h-full px-4 sm:px-20 md:px-52 mx-auto max-w-[900px] "
     >
-      <h3 className="m-4 text-[16px] text-center font-semibold">Create your account</h3>
+      <h3 className="m-4 text-[16px] text-center font-semibold">
+        Create your account
+      </h3>
       <div className="flex flex-col justify-center items-start w-full text-xs gap-1">
         <label htmlFor="firstName">Firstname</label>
         <input
@@ -133,29 +151,30 @@ const Register = () => {
       </div>
       <div className="flex flex-col justify-center items-start w-full text-xs gap-1">
         <label htmlFor="confirmPassword">Confirm Password</label>
-        <input {...register("confirmPassword", {
-            
-            validate: value =>
-              value === password || "The passwords doesn't match"
-            }
-      
-          )}
+        <input
+          {...register("confirmPassword", {
+            validate: (value) =>
+              value === password || "The passwords doesn't match",
+          })}
           className="h-8 w-full border border-gray-500 rounded-md pl-2 text-xs placeholder:text-xs"
           type="text"
           placeholder="Confirm Password"
           id="confirmPassword"
         />
         <p className="text-[10px] h-6 text-red-600">
-          {errors.confirmPassword && (errors.confirmPassword.message as string)}</p>
+          {errors.confirmPassword && (errors.confirmPassword.message as string)}
+        </p>
       </div>
       <div className="flex flex-col justify-center items-start w-full text-xs gap-1">
         <label htmlFor="birthday">Birthday</label>
         <input
-        {...register('birthday',{
-          required:"This field is required",
-        
-          validate: value => calculateAge(value) >= 18 && calculateAge(value) <= 120 || "Age must be between 18 and 120"
-        })}
+          {...register("birthday", {
+            required: "This field is required",
+
+            validate: (value) =>
+              (calculateAge(value) >= 18 && calculateAge(value) <= 120) ||
+              "Age must be between 18 and 120",
+          })}
           className="h-8 w-full border border-gray-500 rounded-md pl-2 text-xs placeholder:text-xs"
           type="date"
           placeholder="Birthday"
@@ -164,7 +183,8 @@ const Register = () => {
           value={birthDate}
         />
         <p className="text-[10px] h-6 text-red-600">
-          {errors.birthday && (errors.birthday.message as string)}</p>
+          {errors.birthday && (errors.birthday.message as string)}
+        </p>
       </div>
       <button
         className="bg-[#F1654D] text-white text-xs  font-semibold w-full h-8 rounded-md"

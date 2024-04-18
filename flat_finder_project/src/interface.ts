@@ -6,4 +6,5 @@ export interface User {
   password: string;
   confirmPassword:string;
   birthday: string;
+  role:string
 }
