@@ -3,7 +3,7 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { registerUser } from "../api/methods/auth/users";
 import { User } from "../interface";
 import { useNavigate } from "react-router";
-
+import { Link } from "react-router-dom";
 
 type FormFields = {
   uid: string;
@@ -25,7 +25,7 @@ const Register = () => {
     formState: { errors },
   } = useForm<FormFields>();
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const [birthDate, setBirthDate] = useState("");
 
@@ -191,6 +191,9 @@ const Register = () => {
         type="submit"
       >
         Create my account
+      </button>
+      <button className="text-[12px] text-[#F1654D] font-semibold underline mt-2">
+        <Link to="/login">Already have an account? Please login! </Link>
       </button>
     </form>
   );

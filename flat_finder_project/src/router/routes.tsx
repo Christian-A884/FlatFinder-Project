@@ -9,6 +9,7 @@ import MyFlats from "../pages/MyFlats"
 import NewFlat from "../pages/NewFlat"
 import Profile from "../pages/Profile"
 import ProfileUpdate from "../pages/ProfileUpdate"
+import ResetPassword from '../pages/ResetPassword'
 
 
 
@@ -24,7 +25,9 @@ const routes = [
   {name: <MyFlats/>, path:'/my-flats'},
   {name: <NewFlat/>, path:'/new-flat'},
   {name: <Profile/>, path:'/profile'},
-  {name: <ProfileUpdate/>, path:'/profile-update'}
+  {name: <ProfileUpdate/>, path:'/profile-update'},
+  {name: <ResetPassword/>, path:'/reset-password'}
+
 ]
 
 

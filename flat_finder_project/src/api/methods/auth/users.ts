@@ -1,4 +1,4 @@
-import { createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword, signInWithEmailAndPassword } from "firebase/auth";
 import { User } from "../../../interface";
 import { auth, db } from "../../firebase/firebase.config";
 import { setDoc, doc } from "firebase/firestore";
@@ -27,4 +27,9 @@ console.log("User registered")
     throw new Error(error as string);
   }
  
+}
+
+export async function loginUser(userData:User){
+  const userCredentials = await signInWithEmailAndPassword(auth, userData.email, userData.password)
+  console.log('User authetication', userCredentials.user)
 }
