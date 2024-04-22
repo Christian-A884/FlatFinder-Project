@@ -33,8 +33,12 @@ const Register = () => {
     try {
       await registerUser(data);
       navigate("/login");
-    } catch (error) {
-      throw new Error(error as string);
+    } catch (error:unknown) {
+      if (error.message.includes("weak")) {
+        alert("Parola ta este prea scurta");
+      } else if(error.message.includes("already-in-use")) {
+        alert("Adresa de email este deja folosita");
+      }
     }
   };
 
@@ -100,7 +104,7 @@ const Register = () => {
           id="lastName"
         />
         <p className="text-[10px] h-6 text-red-600">
-          {errors.firstName && (errors.firstName.message as string)}
+          {errors.lastName && (errors.lastName.message as string)}
         </p>
       </div>
       <div className="flex flex-col justify-center items-start w-full text-xs gap-1">
@@ -133,8 +137,9 @@ const Register = () => {
               message: "Password length must be at least 6 charachters",
             },
             pattern: {
-              value:
-                /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$%^&*!])[a-zA-Z\d@#$%^&*!]{6,}$/,
+              value: /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/,
+
+              // /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$%^&*!])[a-zA-Z\d@#$%^&*!]{6,}$/,
 
               message:
                 "Password must contain at least one uppercase letter,one number and one special character",

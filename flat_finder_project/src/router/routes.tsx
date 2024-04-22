@@ -10,6 +10,8 @@ import NewFlat from "../pages/NewFlat"
 import Profile from "../pages/Profile"
 import ProfileUpdate from "../pages/ProfileUpdate"
 import ResetPassword from '../pages/ResetPassword'
+import Navbar from "../components/Navbar"
+import NavMobile from "../components/NavMobile"
 
 
 
@@ -33,8 +35,10 @@ const routes = [
 
   return (
    <BrowserRouter>
+   <NavMobile/>
+   <Navbar/>
    <Routes>
-    {routes.map(({name, path})=> (<Route path={path} element={name} />))}
+    {routes.map(({name, path})=> (<Route key={path} path={path} element={name} />))}
     
    </Routes>
    

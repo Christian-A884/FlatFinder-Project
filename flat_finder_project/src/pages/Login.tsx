@@ -3,6 +3,8 @@ import { loginUser } from "../api/methods/auth/users";
 import { User } from "../interface";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { useContext } from "react";
+import { UserDataContext } from "../provider/userDatacontext";
 
 type FormFields = {
   uid: string;
@@ -23,10 +25,14 @@ const Login = () => {
     formState: { errors },
   } = useForm<FormFields>();
 
+  const {setUserDetails} = useContext(UserDataContext)
+
   const navigate = useNavigate();
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await loginUser(data);
+      const userCredentials = await loginUser(data);
+      setUserDetails(userCredentials)
+      console.log(userCredentials)
       navigate("/");
     } catch (error) {
       throw new Error(error as string);
@@ -36,7 +42,7 @@ const Login = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col items-center w-full h-auto my-48 px-4 sm:px-20 md:px-52 mx-auto max-w-[900px] "
+      className="flex flex-col items-center w-full h-auto my-28 px-4 sm:px-20 md:px-52 mx-auto max-w-[900px] "
     >
       <h3 className="m-4 text-[16px] text-center font-semibold">
         Login to your account
@@ -98,7 +104,7 @@ const Login = () => {
           <Link to="/register">Don't have an account? SignUp! </Link>
         </button>
         <button className="text-[12px] text-[#F1654D] font-semibold underline mt-2">
-          <Link to="/register">Forgot your password? </Link>
+          <Link to="/reset-password">Forgot your password? </Link>
         </button>
       </div>
     </form>
