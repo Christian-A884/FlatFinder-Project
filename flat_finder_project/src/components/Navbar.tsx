@@ -4,6 +4,7 @@ import { useContext } from "react";
 import { UserDataContext } from "../provider/userDatacontext";
 import { logoutUser } from "../api/methods/auth/users";
 
+
 const Navbar = () => {
   const pageName = [
     { page: "Home", path: "/" },
@@ -22,7 +23,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className= "hidden lg:flex justify-between p-4 items-center">
+    <nav className= "hidden md:flex justify-between p-4 items-center">
       <div className="flex items-center gap-2">
         <Link to="/">
           <img src={logo} className="h-[40px]" alt="logo" />

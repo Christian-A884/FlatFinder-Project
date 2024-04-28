@@ -64,7 +64,7 @@ const Register = () => {
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col justify-center items-center w-full h-full px-4 sm:px-20 md:px-52 mx-auto max-w-[900px] "
+      className="flex flex-col justify-center items-center w-full h-auto px-4 sm:px-20 md:px-52 mx-auto max-w-[900px] "
     >
       <h3 className="m-4 text-[16px] text-center font-semibold">
         Create your account
