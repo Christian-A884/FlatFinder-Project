@@ -7,6 +7,7 @@ export interface User {
   confirmPassword:string;
   birthday: string;
   role:string
+  favourite: FavFlat[]
 }
 
 export interface Flat {
@@ -19,7 +20,13 @@ export interface Flat {
   yearBuilt: number;
   rentPrice: number;
   dateAvailable: Date;
-  userLastName: string;
-  userFirstName: string;
-  userEmail: string
+  isFavourite: boolean;
+  ownerLastName: string;
+  ownerFirstName: string;
+  ownerEmail: string;
+  ownerId: string
+}
+
+export interface FavFlat {
+ flatId: string
 }

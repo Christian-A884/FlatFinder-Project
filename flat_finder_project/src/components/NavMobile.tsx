@@ -1,5 +1,5 @@
 import Hamburger from "hamburger-react";
-import { useRef, useState } from "react";
+import { useRef, useState,useEffect} from "react";
 import { useClickAway } from "react-use";
 import { NavLink, Link } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
@@ -25,12 +25,24 @@ const NavMobile = () => {
 
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
   const { userDetails } = useContext(UserDataContext);
+  const [render, setRender] = useState(false)
   const navigate = useNavigate();
   const handleLogout = async () => {
     await logoutUser();
     localStorage.removeItem("loggedUser");
+    setRender(false)
     navigate("/login");
   };
+
+  useEffect (()=> {
+    if(!JSON.parse(localStorage.getItem("loggedUser") as string)) {
+      setRender(false)
+    } else {setRender(true)}
+  }, [render, userDetails]);
+
+  if(!render) {
+    return null;
+  }
 
   return (
     <nav ref={ref} className="md:hidden">

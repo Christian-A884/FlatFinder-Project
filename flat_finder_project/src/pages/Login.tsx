@@ -6,30 +6,30 @@ import { Link } from "react-router-dom";
 import { useContext } from "react";
 import { UserDataContext } from "../provider/userDatacontext";
 
-type FormFields = {
-  uid: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  birthday: string;
-  role: "regular";
-  data: User;
-};
+// type FormFields = {
+//   uid: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   password: string;
+//   confirmPassword: string;
+//   birthday: string;
+//   role: "regular";
+//   data: User;
+// };
 
 const Login = () => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<FormFields>();
+  } = useForm<User>();
 
   const {setUserDetails} = useContext(UserDataContext)
   
 
   const navigate = useNavigate();
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+  const onSubmit: SubmitHandler<User> = async (data) => {
     try {
       const userCredentials = await loginUser(data);
       setUserDetails(userCredentials)

@@ -1,8 +1,9 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import logo from "../assets/flatFinder.png";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserDataContext } from "../provider/userDatacontext";
 import { logoutUser } from "../api/methods/auth/users";
+import { useEffect } from "react";
 
 
 const Navbar = () => {
@@ -14,13 +15,29 @@ const Navbar = () => {
     { page: "All Users", path: "/allusers" },
   ];
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
+
   const { userDetails } = useContext(UserDataContext);
+  const [render, setRender] = useState(false)
   const navigate = useNavigate();
+  
   const handleLogout = async () => {
     await logoutUser();
     localStorage.removeItem("loggedUser");
+    localStorage.removeItem("favFlat")
+    setRender(false)
     navigate("/login");
   };
+
+  useEffect (()=> {
+    if(!JSON.parse(localStorage.getItem("loggedUser") as string)) {
+      setRender(false)
+    } else {setRender(true)}
+  }, [render, userDetails]);
+
+  if(!render) {
+    return null;
+  }
+
 
   return (
     <nav className= "hidden md:flex justify-between p-4 items-center">

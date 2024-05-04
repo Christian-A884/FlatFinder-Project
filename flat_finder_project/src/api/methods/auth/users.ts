@@ -32,6 +32,7 @@ export async function registerUser(userData: User) {
       email: userData.email,
       birthday: userData.birthday,
       role: "regular",
+      favourite: []
     });
     console.log("User registered");
   } catch (error) {
@@ -70,6 +71,7 @@ export async function fetchUser(id: string) {
       console.log("User data", docSnap.data());
 
       localStorage.setItem("loggedUser", JSON.stringify(docSnap.data()?.uid));
+      localStorage.setItem("favFlat",JSON.stringify(docSnap.data().favourite))
       return docSnap.data();
     } else {
       ("User does not exist");

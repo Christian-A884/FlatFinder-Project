@@ -21,7 +21,7 @@ const routes = [
   {name: <Homepage/>, path:'/'},
   {name: <AllUsers/>, path:'/allusers'},
   {name: <Favourites/>, path:'/favourites'},
-  {name: <FlatView/>, path:'/flat-view'},
+  {name: <FlatView/>, path:'/flat-view/:flatId'},
   {name: <Login/>, path:'/login'},
   {name: <Register/>, path:'/register'},
   {name: <MyFlats/>, path:'/my-flats'},

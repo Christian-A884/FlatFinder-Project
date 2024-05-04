@@ -5,17 +5,17 @@ import { User } from "../interface";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
 
-type FormFields = {
-  uid: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-  birthday: string;
-  role: "regular";
-  data: User;
-};
+// type FormFields = {
+//   uid: string;
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   password: string;
+//   confirmPassword: string;
+//   birthday: string;
+//   role: "regular";
+//   data: User;
+// };
 
 const Register = () => {
   const {
@@ -23,13 +23,13 @@ const Register = () => {
     handleSubmit,
     watch,
     formState: { errors },
-  } = useForm<FormFields>();
+  } = useForm<User>();
 
   const navigate = useNavigate();
 
   const [birthDate, setBirthDate] = useState("");
 
-  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+  const onSubmit: SubmitHandler<User> = async (data) => {
     try {
       await registerUser(data);
       navigate("/login");
