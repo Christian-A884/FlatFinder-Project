@@ -42,6 +42,12 @@ export async function addNewFlat(flat: Flat) {
   }
 }
 
+export async function updateFlat (updatedFlat:Flat) {
+  const flatRef = doc(db,"flats", updatedFlat.id as string)
+  console.log("Flat", updatedFlat)
+  await updateDoc(flatRef, {...updatedFlat})
+}
+
 export async function showFlats() {
   const arr: DocumentData[] = [];
   const data = await getDocs(collection(db, "flats"));

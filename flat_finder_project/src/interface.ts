@@ -1,3 +1,5 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface User {
   uid: string;
   firstName: string;
@@ -29,4 +31,13 @@ export interface Flat {
 
 export interface FavFlat {
  flatId: string
+}
+
+export interface Message {
+  messageContent: string;
+  senderLastname: string;
+  senderFirstname: string;
+  senderEmail: string;
+  flatId: string;
+  date: Timestamp
 }

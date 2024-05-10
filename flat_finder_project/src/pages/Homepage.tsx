@@ -5,6 +5,7 @@ import { NavLink } from "react-router-dom";
 
 import { Flat } from "../interface";
 import { addFavouriteFlat } from "../api/methods/flats/flats";
+import FlatFilter from "../components/FlatFilter";
 
 
 const Homepage = () => {
@@ -70,7 +71,9 @@ const Homepage = () => {
   }, []);
 
   return (
+    
     <div className="overflow-x-scroll">
+      <FlatFilter/>
       <table className="mx-auto my-7 w-[95%] h-auto border-spacing-4 table-auto shadow-lg ">
         <thead>
           <tr>
