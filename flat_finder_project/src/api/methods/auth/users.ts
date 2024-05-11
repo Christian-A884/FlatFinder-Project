@@ -35,8 +35,8 @@ export async function registerUser(userData: User) {
       favourite: []
     });
     console.log("User registered");
-  } catch (error) {
-    console.error("User registering error", error);
+  } catch (error: any) {
+    throw new Error(error)
   }
 }
 

@@ -34,7 +34,7 @@ export async function addNewFlat(flat: Flat) {
       ownerLastName: user.lastName,
       ownerFirstName: user.firstName,
       ownerEmail: user.email,
-      ownerId: user.uid
+      ownerId: user.uid,
     });
     console.log("Flat added");
   } else {
@@ -42,10 +42,10 @@ export async function addNewFlat(flat: Flat) {
   }
 }
 
-export async function updateFlat (updatedFlat:Flat) {
-  const flatRef = doc(db,"flats", updatedFlat.id as string)
-  console.log("Flat", updatedFlat)
-  await updateDoc(flatRef, {...updatedFlat})
+export async function updateFlat(updatedFlat: Flat) {
+  const flatRef = doc(db, "flats", updatedFlat.id as string);
+  console.log("Flat", updatedFlat);
+  await updateDoc(flatRef, { ...updatedFlat });
 }
 
 export async function showFlats() {
@@ -81,7 +81,7 @@ export async function getWantedFlat(flats: FavFlat[]) {
 
   docsArray.forEach((docs) => {
     docs.forEach((doc) => {
-      console.log(doc.data())
+      console.log(doc.data());
       arr.push(doc.data());
     });
   });
@@ -107,6 +107,33 @@ export async function addFavouriteFlat(flats: FavFlat[], newFlat: FavFlat) {
   return newFavFlat;
 }
 
+export async function getFlatbyId(flatId: string) {
+  try {
+    const q = query(collection(db, "flats"), where("id", "==", flatId));
+    const querySnapshot = await getDocs(q);
+    if (!querySnapshot.empty) {
+      return querySnapshot.docs[0].data();
+    }
+  } catch (error) {
+    throw new Error(error);
+  }
+}
+
+export async function getMessagesbyFlatId(flatId: string) {
+  try {
+    const q = query(collection(db, "messages"), where("flatId", "==", flatId))
+    const querySnapshot = await getDocs(q)
+
+    const data:Flat[]= []
+    querySnapshot.forEach((doc)=>{
+      data.push(doc.data())
+    })
+    return data as Flat[]
+    // if (querySnapshot.empty) {
+    //   // throw new Error("no message found");
+  } catch (error) {
+    throw new Error(error);
+}}
 
 // const getFlats = async () => {
 //   const showAllFlats = await showFlats();

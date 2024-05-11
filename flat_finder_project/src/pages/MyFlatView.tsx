@@ -1,77 +1,79 @@
-import { useState, useEffect } from "react";
+import { useContext, useState, useEffect } from "react";
+import { FlatContext } from "../provider/flatcontext";
 import { useParams } from "react-router";
+
 import FlatModal from "../components/FlatModal";
 import { Flat, Message } from "../interface";
+import { UserDataContext } from "../provider/userDatacontext";
+
 import MessageBox from "../components/MessageBox";
-import { getFlatbyId, getMessagesbyFlatId } from "../api/methods/flats/flats";
-import SpinnerLoader from "../components/SpinnerLoader";
-import { toast } from "react-toastify";
+import { showMessages } from "../api/methods/messages/message";
 
 const FlatView = () => {
+  const { flat } = useContext(FlatContext);
+  const { userDetails } = useContext(UserDataContext);
   const [flatModal, setFlatModal] = useState(false);
-  const [currentFlat, setCurrentFlat] = useState<Flat | null>(null);
-
+  const [currentFlat, setCurrentFlat] = useState<Flat[]>([]);
+  const [message, setMessage] = useState({});
   const [allMessages, setAllMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false)
 
-  
+  const getMessage = async () => {
+    const showAllMessages = await showMessages();
+    console.log(showAllMessages);
+    setAllMessages(showAllMessages as Message[]);
+  };
 
   const toggleFlatModal = () => {
     setFlatModal(!flatModal);
   };
 
+  console.log(flat);
   const id = useParams<{ flatId: string }>();
-
+  console.log(id);
   useEffect(() => {
-    
-    async function getData() {
-      
-      if(id.flatId) {
-      try {
-        setIsLoading(true)
-        const data = (await getFlatbyId(id.flatId)) as Flat;
+    const selectedFlat = flat.filter((flt) => flt.id === id.flatId);
+    setCurrentFlat(selectedFlat || null);
+    setMessage({
+      ...id,
+      senderEmail: userDetails.email,
+      senderLastname: userDetails.lastName,
+      senderFirstname: userDetails.firstName,
+    });
+    getMessage();
+  }, [flat, id.flatId]);
 
-        setCurrentFlat(data);
-        const messages = await getMessagesbyFlatId(id.flatId);
-  
-        setAllMessages(messages);
-        toast.success("Datele au fost incarcate")
-      } catch(error) {
-        alert(error.message);
-      }
-      finally{
-        setIsLoading(false)
-      }}
-      
-    }
-    getData();
-  }, []);
+  console.log(message);
+
+  // const specificMessage = message.filter((msg) => msg.flatId === id.flatId)
+  // console.log(specificMessage)
 
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
+  console.log(currentFlat);
+  const currentMessage = allMessages.filter((msg) => msg.flatId === id.flatId);
+  console.log(currentMessage);
 
   return (
     <>
-    {isLoading && <SpinnerLoader/>}
       <div className=" flex flex-col w-full ">
         <div className="flex justify-items-center justify-self-center">
-          {currentFlat ? (
+          {currentFlat.length ? (
             <div className="flex flex-col w-[50%] justify-center items-center mt-28 mx-auto p-4 gap-10 border-none rounded-lg bg-[#F6F7FC]  shadow-md">
               <div className="flex text-3xl font-bold text-[#173466]">
-                <h2>{`Mr ${currentFlat.ownerLastName} flat`}</h2>
+                <h2>{`Mr ${currentFlat[0].ownerLastName} flat`}</h2>
               </div>
               <div className="flex flex-col gap-2 text-xl text-[#173466] font-semibold">
-                <p>City: {currentFlat.city}</p>
+                <p>City: {currentFlat[0].city}</p>
                 <p>
-                  Adress: {currentFlat.streetName} street, no.{" "}
-                  {currentFlat.streetNumber}{" "}
+                  Adress: {currentFlat[0].streetName} street, no.{" "}
+                  {currentFlat[0].streetNumber}{" "}
                 </p>
                 <p>Has AC:</p>
-                <p>Built year: {currentFlat.yearBuilt}</p>
-                <p>Rent price: {currentFlat.rentPrice} $</p>
-                <p>Available date: {currentFlat.dateAvailable}</p>
+                <p>Built year: {currentFlat[0].yearBuilt}</p>
+                <p>Rent price: {currentFlat[0].rentPrice} $</p>
+                <p>Available date: {currentFlat[0].dateAvailable}</p>
                 <p></p>
               </div>
-              {currentFlat.ownerId === loggedUser && (
+              {currentFlat[0].ownerId === loggedUser && (
                 <button
                   onClick={toggleFlatModal}
                   className="text-sm w-20 text-center bg-[#F1654D] p-2 rounded-md text-white font-semibold"
@@ -84,14 +86,11 @@ const FlatView = () => {
             <div className="flex flex-col w-full justify-center items-center mt-28 mx-auto p-4 gap-10 border-none rounded-lg bg-[#F6F7FC]  shadow-md"></div>
           )}
           <div>
-            {currentFlat && currentFlat.ownerId !== loggedUser ? (
-              <MessageBox />
+            {currentFlat.length && currentFlat[0].ownerId !== loggedUser ? (
+              <MessageBox message={message} />
             ) : (
-              allMessages.map((message, index) => (
-                <div
-                  key={index}
-                  className="flex flex-col h-[30%] w-[70%] justify-center items-start mt-10 mx-auto gap-2 border-none rounded-lg bg-[#F6F7FC]  shadow-md"
-                >
+              currentMessage.map((message, index) => (
+                <div key={index} className="flex flex-col h-[30%] w-[70%] justify-center items-start mt-10 mx-auto gap-2 border-none rounded-lg bg-[#F6F7FC]  shadow-md">
                   <p className="text-sm text-[#173466] font-semibold pl-3">
                     Message date: {message.date.toDate().toString()}
                   </p>

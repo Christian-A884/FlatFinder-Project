@@ -3,8 +3,12 @@ import { loginUser } from "../api/methods/auth/users";
 import { User } from "../interface";
 import { useNavigate } from "react-router";
 import { Link } from "react-router-dom";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { UserDataContext } from "../provider/userDatacontext";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+import SpinnerLoader from "../components/SpinnerLoader";
+import logo from "../assets/flatFinder.png"
 
 // type FormFields = {
 //   uid: string;
@@ -19,96 +23,105 @@ import { UserDataContext } from "../provider/userDatacontext";
 // };
 
 const Login = () => {
+  const [isLoading, setIsLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<User>();
 
-  const {setUserDetails} = useContext(UserDataContext)
-  
+  const { setUserDetails } = useContext(UserDataContext);
 
   const navigate = useNavigate();
   const onSubmit: SubmitHandler<User> = async (data) => {
     try {
+      setIsLoading(true);
       const userCredentials = await loginUser(data);
-      setUserDetails(userCredentials)
-      console.log(userCredentials)
+      setUserDetails(userCredentials);
+      console.log(userCredentials);
+      toast.success("You rules");
       navigate("/");
     } catch (error) {
-      throw new Error(error as string);
+      toast.error("Something is wrong");
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <form
-      onSubmit={handleSubmit(onSubmit)}
-      className="flex flex-col items-center w-full h-auto my-28 px-4 sm:px-20 md:px-52 mx-auto max-w-[900px] "
-    >
-      <h3 className="m-4 text-[16px] text-center font-semibold">
-        Login to your account
-      </h3>
-      <div className="flex flex-col justify-center items-start w-full text-xs gap-1 ">
-        <label htmlFor="email">Email address</label>
-        <input
-          {...register("email", {
-            required: "Email is required",
-            validate: {
-              isEmail: (value) =>
-                /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value) ||
-                "Invalid email format",
-            },
-          })}
-          className="h-8 w-full border border-gray-500 rounded-md pl-2 text-xs placeholder:text-xs"
-          type="text"
-          placeholder="Email address"
-          id="email"
-        />
-        <p className="text-[10px] h-6 text-red-600">
-          {errors.email && (errors.email.message as string)}
-        </p>
-      </div>
-      <div className="flex flex-col justify-center items-start w-full  text-xs gap-1">
-        <label htmlFor="password">Password</label>
-        <input
-          {...register("password", {
-            required: "Password is required",
-            minLength: {
-              value: 6,
-              message: "Password length must be at least 6 charachters",
-            },
-            pattern: {
-              value:
-                /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$%^&*!])[a-zA-Z\d@#$%^&*!]{6,}$/,
-
-              message:
-                "Password must contain at least one uppercase letter,one number and one special character",
-            },
-          })}
-          className="h-8 w-full border border-gray-500 rounded-md pl-2 text-xs placeholder:text-xs"
-          type="text"
-          placeholder="Password"
-          id="password"
-        />
-        <p className="text-[10px] h-6 text-red-600">
-          {errors.password && (errors.password.message as string)}
-        </p>
-      </div>
-      <button
-        className="bg-[#F1654D] text-white text-xs  font-semibold w-full h-8 rounded-md"
-        type="submit"
+    <> {isLoading ? <SpinnerLoader/> : null}
+      <form
+        onSubmit={handleSubmit(onSubmit)}
+        className="flex flex-col justify-center items-center w-full h-auto gap-6 my-36 px-10 sm:px-20 md:px-20 mx-auto max-w-[1000px] "
       >
-        Login
-      </button>
-      <div className="flex gap-32">
-        <button className="text-[12px] text-[#F1654D] font-semibold underline mt-2">
-          <Link to="/register">Don't have an account? SignUp! </Link>
+         <Link to="/">
+          <img src={logo} className="h-[80px]" alt="logo" />
+        </Link>
+        <h3 className="m-4 text-2xl text-center font-semibold">
+          Login to your account
+        </h3>
+        <div className="flex flex-col justify-center items-start w-full text-base gap-1 ">
+          <label htmlFor="email">Email address</label>
+          <input
+            {...register("email", {
+              required: "Email is required",
+              validate: {
+                isEmail: (value) =>
+                  /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/.test(value) ||
+                  "Invalid email format",
+              },
+            })}
+            className="h-10 w-full border border-gray-500 rounded-md pl-2 text-sm placeholder:text-sm"
+            type="text"
+            placeholder="Email address"
+            id="email"
+          />
+          <p className="text-[10px] h-6 text-red-600">
+            {errors.email && (errors.email.message as string)}
+          </p>
+        </div>
+        <div className="flex flex-col justify-center items-start w-full  text-base gap-1">
+          <label htmlFor="password">Password</label>
+          <input
+            {...register("password", {
+              required: "Password is required",
+              minLength: {
+                value: 6,
+                message: "Password length must be at least 6 charachters",
+              },
+              pattern: {
+                value:
+                  /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$%^&*!])[a-zA-Z\d@#$%^&*!]{6,}$/,
+
+                message:
+                  "Password must contain at least one uppercase letter,one number and one special character",
+              },
+            })}
+            className="h-10 w-full border border-gray-500 rounded-md pl-2 text-sm placeholder:text-sm"
+            type="text"
+            placeholder="Password"
+            id="password"
+          />
+          <p className="text-[10px] h-6 text-red-600">
+            {errors.password && (errors.password.message as string)}
+          </p>
+        </div>
+        <button
+          className="bg-[#F1654D] text-white hover:text-gray-200 text-lg  font-semibold w-full h-10 rounded-md"
+          type="submit"
+        >
+          Login
         </button>
-        <button className="text-[12px] text-[#F1654D] font-semibold underline mt-2">
-          <Link to="/reset-password">Forgot your password? </Link>
-        </button>
-      </div>
-    </form>
+        <div className="flex flex-col gap-4 lg:flex-row lg:gap-32">
+          <button className="text-base text-[#F1654D] font-semibold underline mt-2">
+            <Link to="/register">Don't have an account? SignUp! </Link>
+          </button>
+          <button className="text-base text-[#F1654D] font-semibold underline mt-2">
+            <Link to="/reset-password">Forgot your password? </Link>
+          </button>
+        </div>
+      </form>
+    </>
   );
 };
 
