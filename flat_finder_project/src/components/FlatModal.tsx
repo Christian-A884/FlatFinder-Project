@@ -1,28 +1,30 @@
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router";
+// import { useNavigate } from "react-router";
 import { Flat } from "../interface";
 import { updateFlat } from "../api/methods/flats/flats";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import SpinnerLoader from "./SpinnerLoader";
 
-const FlatModal = ({ currentFlat, closeModal }) => {
+const FlatModal = ({ currentFlat, setCurrentFlat, closeModal }) => {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm<Flat>({ defaultValues: currentFlat[0] });
+  } = useForm<Flat>({ defaultValues: currentFlat });
   const [isLoading, setIsLoading] = useState(false);
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const onSubmit: SubmitHandler<Flat> = async (data) => {
     try {
       setIsLoading(true);
       toast.info("Flat data is updating...");
       await updateFlat(data);
+      setCurrentFlat(data)
       toast.success("Flat data updated");
-      // closeModal()
-      // navigate("/my-flats");
+      closeModal()
+      
+      // navigate("/flat-view/:flatId");
     } catch (error) {
       toast.error("Produsul nu a putut fi adaugat");
     } finally {
@@ -32,7 +34,7 @@ const FlatModal = ({ currentFlat, closeModal }) => {
 
   return (
     <> {isLoading ? <SpinnerLoader/> : null}
-      <div className="flex absolute w-[80%] items-center justify-center bg-white mx-auto drop-shadow-lg rounded-2xl mb-4">
+      <div className="flex absolute w-[70%] h-[70%] align-center justify-center left-[50%] right-[50%] -translate-x-1/2 translate-y-[5%] translate mx-auto bg-white drop-shadow-lg rounded-2xl mb-4">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col justify-center items-center w-full h-full px-10 sm:px-28 md:px-52 mx-auto max-w-[1098px] "

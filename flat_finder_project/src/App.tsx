@@ -11,7 +11,7 @@ import { ToastContainer } from "react-toastify";
 function App() {
   const [userDetails, setUserDetails] = useState({});
   const [allUsers, setAllUsers] = useState([]);
-  const [flat, setFlat] = useState([] as Flat[]);
+  const [flat, setFlat] = useState<Flat[]>([]);
   console.log(flat);
 
   const getUser = async () => {

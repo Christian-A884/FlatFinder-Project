@@ -27,6 +27,7 @@ export interface Flat {
   ownerFirstName: string;
   ownerEmail: string;
   ownerId: string
+  [key: string]: unknown;
 }
 
 export interface FavFlat {

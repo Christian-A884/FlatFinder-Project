@@ -13,7 +13,7 @@ const FlatView = () => {
 
   const [allMessages, setAllMessages] = useState<Message[]>([]);
   const [isLoading, setIsLoading] = useState(false)
-
+console.log(allMessages)
   
 
   const toggleFlatModal = () => {
@@ -21,6 +21,7 @@ const FlatView = () => {
   };
 
   const id = useParams<{ flatId: string }>();
+  console.log(id)
 
   useEffect(() => {
     
@@ -29,15 +30,17 @@ const FlatView = () => {
       if(id.flatId) {
       try {
         setIsLoading(true)
+        
         const data = (await getFlatbyId(id.flatId)) as Flat;
-
         setCurrentFlat(data);
+
         const messages = await getMessagesbyFlatId(id.flatId);
-  
+        console.log(messages)
         setAllMessages(messages);
-        toast.success("Datele au fost incarcate")
+        
+        
       } catch(error) {
-        alert(error.message);
+        toast.error(error.message);
       }
       finally{
         setIsLoading(false)
@@ -45,6 +48,7 @@ const FlatView = () => {
       
     }
     getData();
+    
   }, []);
 
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
@@ -112,7 +116,7 @@ const FlatView = () => {
         </div>
 
         {flatModal && (
-          <FlatModal currentFlat={currentFlat} closeModal={toggleFlatModal} />
+          <FlatModal currentFlat={currentFlat} setCurrentFlat={setCurrentFlat} closeModal={toggleFlatModal} />
         )}
       </div>
     </>

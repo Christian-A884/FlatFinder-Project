@@ -8,9 +8,10 @@ import {
   where,
   DocumentData,
   updateDoc,
+  deleteDoc
 } from "firebase/firestore";
 import { v4 as uuidv4 } from "uuid";
-import { FavFlat, Flat } from "../../../interface";
+import { FavFlat, Flat, Message } from "../../../interface";
 import { fetchUser } from "../auth/users";
 
 export async function addNewFlat(flat: Flat) {
@@ -26,7 +27,7 @@ export async function addNewFlat(flat: Flat) {
       streetName: flat.streetName,
       streetNumber: flat.streetNumber,
       areaSize: flat.areaSize,
-      hasAC: flat.hasAC,
+      hasAC:flat.hasAC ? "Yes" : "No",
       yearBuilt: flat.yearBuilt,
       rentPrice: flat.rentPrice,
       dateAvailable: flat.dateAvailable,
@@ -107,6 +108,18 @@ export async function addFavouriteFlat(flats: FavFlat[], newFlat: FavFlat) {
   return newFavFlat;
 }
 
+export async function removeFavouriteFlat(id:string, flats: []) {
+  const filtered = flats.filter((item:FavFlat) => item.flatId !== id)
+  const user_id=JSON.parse(localStorage.getItem("loggedUser")as string)
+  const flatRef = doc(db, "users", user_id)
+  await updateDoc(flatRef,{
+    favourite: filtered
+  })
+  localStorage.setItem("favFlat",JSON.stringify(filtered))
+  const newFavFlat = await getWantedFlat(filtered)
+  return newFavFlat
+}
+
 export async function getFlatbyId(flatId: string) {
   try {
     const q = query(collection(db, "flats"), where("id", "==", flatId));
@@ -119,18 +132,35 @@ export async function getFlatbyId(flatId: string) {
   }
 }
 
+export async function getFlatsbyFlatId(flats: Flat[]) {
+  const promises = flats.map((flat) => {
+    const q = query(collection(db, "flats"), where("id", "==", flat.flatId));
+    return getDocs(q);
+  });
+  const docsArray = await Promise.all(promises);
+  const arr: DocumentData[] = [];
+
+  docsArray.forEach((docs) => {
+    docs.forEach((doc) => {
+      console.log(doc.data());
+      arr.push(doc.data());
+    });
+  });
+
+  return arr;
+   
+}
+
 export async function getMessagesbyFlatId(flatId: string) {
   try {
     const q = query(collection(db, "messages"), where("flatId", "==", flatId))
     const querySnapshot = await getDocs(q)
 
-    const data:Flat[]= []
+    const data:Message[]= []
     querySnapshot.forEach((doc)=>{
-      data.push(doc.data())
+      data.push(doc.data() as Message)
     })
-    return data as Flat[]
-    // if (querySnapshot.empty) {
-    //   // throw new Error("no message found");
+    return data as Message[]
   } catch (error) {
     throw new Error(error);
 }}
@@ -140,3 +170,23 @@ export async function getMessagesbyFlatId(flatId: string) {
 //   console.log("Flat", showAllFlats);
 //   setFlat(showAllFlats as Flat[]);
 // };
+
+export async function getFlatsbyOwnerId(userId: string) {
+  try {
+    const q = query(collection(db, "flats"), where("ownerId", "==", userId))
+    const querySnapshot = await getDocs(q)
+
+    const data:Flat[]= []
+    querySnapshot.forEach((doc)=>{
+      data.push(doc.data() as Flat)
+    })
+    return data as Flat[]
+  } catch (error) {
+    throw new Error(error);
+}}
+
+export async function deleteFlat(flatReference: string) {
+  const flatRef = doc(db, "flats", flatReference);
+  await deleteDoc(flatRef);
+  console.log("deleted");
+}
