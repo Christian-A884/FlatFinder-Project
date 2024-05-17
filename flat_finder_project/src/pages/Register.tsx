@@ -7,18 +7,8 @@ import { Link } from "react-router-dom";
 import { toast } from "react-toastify";
 import SpinnerLoader from "../components/SpinnerLoader";
 import logo from "../assets/flatFinder.png"
+import calculateUserAge from "../api/methods/auth/users";
 
-// type FormFields = {
-//   uid: string;
-//   firstName: string;
-//   lastName: string;
-//   email: string;
-//   password: string;
-//   confirmPassword: string;
-//   birthday: string;
-//   role: "regular";
-//   data: User;
-// };
 
 const Register = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -47,16 +37,7 @@ const Register = () => {
 
   const password = watch("password");
 
-  function calculateAge(birthDate: string) {
-    const currentDate = new Date();
-    const birthday = new Date(birthDate);
-    const ageInMilliseconds = currentDate.getTime() - birthday.getTime();
-    const ageResult = Math.floor(
-      ageInMilliseconds / (1000 * 60 * 60 * 24 * 365.25)
-    );
-
-    return ageResult;
-  }
+  
 
   // console.log(calculateAge('01.01.1983'))
 
@@ -186,7 +167,7 @@ const Register = () => {
               required: "This field is required",
 
               validate: (value) =>
-                (calculateAge(value) >= 18 && calculateAge(value) <= 120) ||
+                (calculateUserAge(value) >= 18 && calculateUserAge(value) <= 120) ||
                 "Age must be between 18 and 120",
             })}
             className="h-10 w-full border border-gray-500 rounded-md pl-2 text-sm placeholder:text-sm"

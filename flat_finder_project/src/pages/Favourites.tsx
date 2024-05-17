@@ -50,8 +50,12 @@ const Favourites = () => {
         const newFavFlat = await removeFavouriteFlat(flatId, favFlats)
         setUserFavFlats(newFavFlat as Flat[])
         toast.success("Favourite flats updated")
-      } catch(error: unknown){
-        toast.error(error.message)
+      } catch(error){
+        if (error instanceof Error) {
+          toast.error(error.message)
+        } else {
+          console.error(error);
+        }
       } finally {
         setIsLoading(false)
       }

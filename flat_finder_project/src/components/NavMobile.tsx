@@ -45,7 +45,7 @@ const NavMobile = () => {
   }
 
   return (
-    <nav ref={ref} className="md:hidden">
+    <nav ref={ref} className="mdl:hidden">
       <Hamburger toggled={isOpen} size={18} toggle={setIsOpen} />
       <div className="absolute flex items-center gap-5 right-6 top-2">
       {loggedUser ? (

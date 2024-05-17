@@ -23,8 +23,6 @@ const FlatModal = ({ currentFlat, setCurrentFlat, closeModal }) => {
       setCurrentFlat(data)
       toast.success("Flat data updated");
       closeModal()
-      
-      // navigate("/flat-view/:flatId");
     } catch (error) {
       toast.error("Produsul nu a putut fi adaugat");
     } finally {

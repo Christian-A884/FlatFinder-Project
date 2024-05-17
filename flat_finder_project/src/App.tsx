@@ -13,6 +13,7 @@ function App() {
   const [allUsers, setAllUsers] = useState([]);
   const [flat, setFlat] = useState<Flat[]>([]);
   console.log(flat);
+  console.log(userDetails)
 
   const getUser = async () => {
     const loggedUser =

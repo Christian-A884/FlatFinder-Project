@@ -128,7 +128,11 @@ export async function getFlatbyId(flatId: string) {
       return querySnapshot.docs[0].data();
     }
   } catch (error) {
-    throw new Error(error);
+    if (error instanceof Error) {
+      throw new Error;
+    } else {
+      console.error(error);
+    }
   }
 }
 
@@ -162,14 +166,13 @@ export async function getMessagesbyFlatId(flatId: string) {
     })
     return data as Message[]
   } catch (error) {
-    throw new Error(error);
+    if (error instanceof Error) {
+      throw new Error;
+    } else {
+      console.error(error);
+    }
 }}
 
-// const getFlats = async () => {
-//   const showAllFlats = await showFlats();
-//   console.log("Flat", showAllFlats);
-//   setFlat(showAllFlats as Flat[]);
-// };
 
 export async function getFlatsbyOwnerId(userId: string) {
   try {
@@ -182,7 +185,11 @@ export async function getFlatsbyOwnerId(userId: string) {
     })
     return data as Flat[]
   } catch (error) {
-    throw new Error(error);
+    if (error instanceof Error) {
+      throw new Error;
+    } else {
+      console.error(error);
+    }
 }}
 
 export async function deleteFlat(flatReference: string) {

@@ -6,14 +6,16 @@ export interface User {
   lastName: string;
   email: string;
   password: string;
-  confirmPassword:string;
+  confirmPassword: string;
   birthday: string;
-  role:string
-  favourite: FavFlat[]
+  role: string;
+  favourite: FavFlat[];
+  age: number;
+  userFlatCount: number;
 }
 
 export interface Flat {
-  id: string,
+  id: string;
   city: string;
   streetName: string;
   streetNumber: number;
@@ -26,12 +28,12 @@ export interface Flat {
   ownerLastName: string;
   ownerFirstName: string;
   ownerEmail: string;
-  ownerId: string
+  ownerId: string;
   [key: string]: unknown;
 }
 
 export interface FavFlat {
- flatId: string
+  flatId: string;
 }
 
 export interface Message {
@@ -40,5 +42,5 @@ export interface Message {
   senderFirstname: string;
   senderEmail: string;
   flatId: string;
-  date: Timestamp
+  date: Timestamp;
 }

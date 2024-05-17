@@ -77,11 +77,14 @@ const Homepage = () => {
       await removeFavouriteFlat(flatId, favFlats);
       const updatedFavFlat = favFlat.filter((item) => item.flatId !== flatId);
       setFavFlat(updatedFavFlat);
-      toast.success("Flat has been removed from favourites")
-    } catch(error:unknown){
-      toast.error(error.message)
+      toast.success("Flat has been removed from favourites");
+    } catch (error) {
+      if (error instanceof Error) {
+        toast.error(error.message);
+      } else {
+        console.error(error);
+      }
     }
-    
   };
 
   // const getUsers = async () => {

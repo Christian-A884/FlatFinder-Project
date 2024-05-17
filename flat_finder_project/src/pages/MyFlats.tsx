@@ -1,20 +1,29 @@
 import { NavLink } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { deleteFlat, getFlatsbyOwnerId } from "../api/methods/flats/flats";
 import { Flat } from "../interface";
 import SpinnerLoader from "../components/SpinnerLoader";
+import { UserDataContext } from "../provider/userDatacontext";
+import { updateUser } from "../api/methods/auth/users";
 
 const MyFlats = () => {
   const [userFlats, setUserFlats] = useState<Flat[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-
+  const [flatCount, setFlatCount] =useState<number>(0)
+  const {userDetails} = useContext(UserDataContext)
+console.log(userDetails)
   // const userFlats = flat.filter((flt) => flt.ownerId === loggedUser)
   console.log(userFlats);
+  console.log(flatCount)
+  const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
+
   const getUserFlats = async() => {
     try {
       setIsLoading(true);
       const data = (await getFlatsbyOwnerId(loggedUser)) as Flat[];
       setUserFlats(data);
+       setFlatCount(data.length)
+
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw error.message;
@@ -25,10 +34,19 @@ const MyFlats = () => {
       setIsLoading(false);
     }}
 
-  const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
+    const updatedUser = async() => {
+      await updateUser({...userDetails, userFlatCount:flatCount})
+     }
+  
+
   useEffect(() => {
     getUserFlats();
+    updatedUser()
   }, []);
+
+  useEffect(() => {
+    updatedUser()
+  }, [flatCount]);
 
   const handleDeleteFlat = async (id:string) => {
     await deleteFlat(id)
