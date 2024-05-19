@@ -30,6 +30,7 @@ export interface Flat {
   ownerEmail: string;
   ownerId: string;
   [key: string]: unknown;
+  flatImage: string
 }
 
 export interface FavFlat {

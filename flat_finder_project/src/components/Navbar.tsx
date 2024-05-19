@@ -11,11 +11,11 @@ const Navbar = () => {
     { page: "Home", path: "/" },
     { page: "My Profile", path: `/profile/${loggedUser}` },
     { page: "My Flats", path: "/my-flats" },
-    { page: "Favourites", path: "/favourites" },
+    { page: "Favorites", path: "/favourites" },
     { page: "All Users", path: "/allusers" },
   ];
 
-  const { userDetails } = useContext(UserDataContext);
+  const { userDetails} = useContext(UserDataContext);
   const [render, setRender] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
@@ -47,7 +47,8 @@ const Navbar = () => {
         <Link to="/">
           <img src={logo} className="h-[60px]" alt="logo" />
         </Link>
-        {loggedUser ? (
+        {loggedUser && userDetails ? (
+          
           <h2 className="text-lg text-[#F1654D] font-semibold">
             Hello, {userDetails.firstName} {userDetails.lastName}
           </h2>
@@ -58,7 +59,7 @@ const Navbar = () => {
 
       <div>
         <ul className="flex gap-4">
-          {userDetails.role === "admin"
+          {userDetails.role === "Admin"
             ? pageName.map((page, index) => (
                 <li
                   key={index}

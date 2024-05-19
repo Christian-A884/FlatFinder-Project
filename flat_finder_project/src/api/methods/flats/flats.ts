@@ -36,6 +36,7 @@ export async function addNewFlat(flat: Flat) {
       ownerFirstName: user.firstName,
       ownerEmail: user.email,
       ownerId: user.uid,
+      flatImage: flat.flatImage
     });
     console.log("Flat added");
   } else {

@@ -1,4 +1,4 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { useContext, useEffect, useState } from "react";
 import { deleteFlat, getFlatsbyOwnerId } from "../api/methods/flats/flats";
 import { Flat } from "../interface";
@@ -6,15 +6,15 @@ import SpinnerLoader from "../components/SpinnerLoader";
 import { UserDataContext } from "../provider/userDatacontext";
 import { updateUser } from "../api/methods/auth/users";
 
+
 const MyFlats = () => {
   const [userFlats, setUserFlats] = useState<Flat[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [flatCount, setFlatCount] =useState<number>(0)
   const {userDetails} = useContext(UserDataContext)
-console.log(userDetails)
-  // const userFlats = flat.filter((flt) => flt.ownerId === loggedUser)
-  console.log(userFlats);
-  console.log(flatCount)
+  const navigate = useNavigate()
+
+  
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
 
   const getUserFlats = async() => {
@@ -40,6 +40,8 @@ console.log(userDetails)
   
 
   useEffect(() => {
+    if (!JSON.parse(localStorage.getItem("loggedUser") as string)) {
+      navigate("/login")}
     getUserFlats();
     updatedUser()
   }, []);
@@ -57,11 +59,11 @@ console.log(userDetails)
     { header: "City", value: "city" },
     { header: "Street", value: "streetName" },
     { header: "Street number", value: "streetNumber" },
-    { header: "Area size", value: "areaSize" },
+    { header: "Area size (sqm)", value: "areaSize" },
     { header: "Has AC", value: "hasAC" },
     { header: "Built Year", value: "yearBuilt" },
-    { header: "Rent price", value: "rentPrice" },
-    { header: "Date available", value: "dateAvailable" },
+    { header: "Rent price (euro)", value: "rentPrice" },
+    { header: "Available from", value: "dateAvailable" },
   ];
 
   // const userFlats = flat.filter((flt) => flt.)
@@ -69,6 +71,7 @@ console.log(userDetails)
   return (
     <>
       {isLoading && <SpinnerLoader />}
+      {userFlats.length ? (
       <div className="overflow-x-scroll mt-16">
         <table className="mx-auto my-7 w-[95%] h-auto border-spacing-4 table-auto shadow-lg ">
           <thead>
@@ -118,7 +121,8 @@ console.log(userDetails)
             ))}
           </tbody>
         </table>
-      </div>
+      </div>) : (
+      <h1 className="flex justify-center text-4xl font-semibold text-[#173466] items-center my-48">No flats added</h1>) }
     </>
   );
 };

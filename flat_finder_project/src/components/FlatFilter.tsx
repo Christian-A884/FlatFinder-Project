@@ -84,11 +84,11 @@ const FlatFilter = () => {
   };
 
   const handleFlatFilter = () => {
-    setIsLoading(true)
-    setTimeout(()=>{
+    setIsLoading(true);
+    setTimeout(() => {
       setFlat(filterFlat(flat));
       setIsLoading(false);
-    }, 1000)
+    }, 1000);
     // try {
     //   setIsLoading(true);
     //   setFlat(filterFlat(flat));
@@ -99,8 +99,8 @@ const FlatFilter = () => {
   };
 
   const handleClearFilter = () => {
-    window.location.reload()
-  }
+    window.location.reload();
+  };
 
   const handleFlatSort = () => {
     setFlat(sortFlat(flat));
@@ -110,8 +110,8 @@ const FlatFilter = () => {
   return (
     <>
       {isLoading && <SpinnerLoader />}
-      <div className="flex gap-5">
-        <div className="flex justify-start items-center w-[60%] px-4 gap-3">
+      <div className="flex justify-center md:justify-start md:flex-col xl:flex-row gap-5">
+        <div className="flex flex-col w-full xs:w-[60%] justify-start md:items-start md:flex-row px-4 md:w-full mdl:w-[90%]  gap-3 ">
           <div className="flex flex-col text-sm gap-1">
             <label className="font-semibold text-[#F1654D]" htmlFor="city">
               City:{" "}
@@ -125,11 +125,11 @@ const FlatFilter = () => {
               onChange={(e) => handleFlatFilterChange(e)}
             />
           </div>
-          <div className="flex flex-col items-center text-sm gap-1">
+          <div className="flex flex-col mdl:items-center text-sm gap-1">
             <label className="font-semibold text-[#F1654D]" htmlFor="minPrice">
               Rent price range
             </label>
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 md:flex-row">
               <input
                 className="border placeholder: h-5 w-28 p-2"
                 name="minPrice"
@@ -148,11 +148,11 @@ const FlatFilter = () => {
               />
             </div>
           </div>
-          <div className="flex flex-col items-center text-sm gap-1">
+          <div className="flex flex-col mdl:items-center text-sm gap-1">
             <label className="font-semibold text-[#F1654D]" htmlFor="">
               Area size range
             </label>
-            <div className="flex gap-2">
+            <div className="flex flex-col gap-2 md:flex-row">
               <input
                 className="border placeholder: h-5 w-28 p-2"
                 name="minArea"
@@ -171,21 +171,23 @@ const FlatFilter = () => {
               />
             </div>
           </div>
-          <button
-            onClick={handleFlatFilter}
-            className="text-[14px] text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
-          >
-            Filter
-          </button>
-          <button
-            onClick={handleClearFilter}
-            className="text-[14px] w-22 text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
-          >
-            Clear filter
-          </button>
+          <div className="flex gap-3 w-40 mdl:items-center mdl:justify-center mdl:p-2">
+            <button
+              onClick={handleFlatFilter}
+              className=" text-[12px] mdl:text-[14px] text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
+            >
+              Filter
+            </button>
+            <button
+              onClick={handleClearFilter}
+              className="text-[12px] mdl:text-[14px] w-22 text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
+            >
+              Clear filter
+            </button>
+          </div>
         </div>
 
-        <div className="flex justify-start items-center px-4 gap-3">
+        <div className="flex flex-col justify-start items-start w-full md:flex-row px-4 gap-3">
           <div className="flex flex-col text-sm gap-1">
             <label className="font-semibold text-[#F1654D]" htmlFor="minPrice">
               Sort by:

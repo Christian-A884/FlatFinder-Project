@@ -11,6 +11,7 @@ import Profile from "../pages/Profile"
 import ResetPassword from '../pages/ResetPassword'
 import Navbar from "../components/Navbar"
 import NavMobile from "../components/NavMobile"
+import Footer from "../components/Footer"
 
 
 
@@ -37,8 +38,8 @@ const AppRouter = () => {
    <Navbar/>
    <Routes>
     {routes.map(({name, path})=> (<Route key={path} path={path} element={name} />))}
-    
    </Routes>
+   <Footer/>
    
    
    </BrowserRouter>

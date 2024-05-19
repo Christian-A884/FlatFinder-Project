@@ -1,7 +1,7 @@
 import Hamburger from "hamburger-react";
-import { useRef, useState,useEffect} from "react";
+import { useRef, useState, useEffect } from "react";
 import { useClickAway } from "react-use";
-import { NavLink, Link } from "react-router-dom";
+import { NavLink, Link, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import { useNavigate } from "react-router-dom";
 import { UserDataContext } from "../provider/userDatacontext";
@@ -12,35 +12,39 @@ import logo from "../assets/flatFinder.png";
 const NavMobile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null);
-
+  const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
   useClickAway(ref, () => setIsOpen(false));
 
   const pageName = [
     { page: "Home", path: "/" },
-    { page: "My Profile", path: "/profile" },
+    { page: "My Profile", path: `/profile/${loggedUser}` },
     { page: "My Flats", path: "/my-flats" },
-    { page: "Favourites", path: "/favourites" },
+    { page: "Favorites", path: "/favourites" },
     { page: "All Users", path: "/allusers" },
   ];
 
-  const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
   const { userDetails } = useContext(UserDataContext);
-  const [render, setRender] = useState(false)
+  const [render, setRender] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const isMyFlatsPage = location.pathname === "/my-flats";
+
   const handleLogout = async () => {
     await logoutUser();
     localStorage.removeItem("loggedUser");
-    setRender(false)
+    setRender(false);
     navigate("/login");
   };
 
-  useEffect (()=> {
-    if(!JSON.parse(localStorage.getItem("loggedUser") as string)) {
-      setRender(false)
-    } else {setRender(true)}
+  useEffect(() => {
+    if (!JSON.parse(localStorage.getItem("loggedUser") as string)) {
+      setRender(false);
+    } else {
+      setRender(true);
+    }
   }, [render, userDetails]);
 
-  if(!render) {
+  if (!render) {
     return null;
   }
 
@@ -48,19 +52,15 @@ const NavMobile = () => {
     <nav ref={ref} className="mdl:hidden">
       <Hamburger toggled={isOpen} size={18} toggle={setIsOpen} />
       <div className="absolute flex items-center gap-5 right-6 top-2">
-      {loggedUser ? (
-          <h2 className="text-xs text-[#F1654D] font-semibold">
+        {loggedUser ? (
+          <h2 className="text-base text-[#F1654D] font-semibold">
             Hello, {userDetails.firstName} {userDetails.lastName}
           </h2>
         ) : (
           <h2></h2>
         )}
         <Link to="/">
-          <img
-            src={logo}
-            className=" top-2 h-[40px]"
-            alt="logo"
-          />
+          <img src={logo} className=" top-2 h-[50px]" alt="logo" />
         </Link>
       </div>
 
@@ -131,6 +131,14 @@ const NavMobile = () => {
                 </div>
               ) : (
                 <div className="flex w-full absolute my-40 items-center justify-center left-0 pl-5 gap-48">
+                  {isMyFlatsPage && (
+                    <Link
+                      to={"/new-flat"}
+                      className="text-sm border p-1 bg-[#F1654D] border-none rounded-md text-[#F6F7FC]"
+                    >
+                      + New Flat
+                    </Link>
+                  )}
                   <button className="text-sm border p-1 bg-[#F1654D] border-none rounded-md text-[#F6F7FC]">
                     Delete Account
                   </button>

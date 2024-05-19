@@ -22,6 +22,7 @@ const Register = () => {
   const navigate = useNavigate();
 
   const onSubmit: SubmitHandler<User> = async (data) => {
+    console.log(data)
     try {
       setIsLoading(true);
       toast.info("Creating your account. Please wait!");
@@ -50,7 +51,7 @@ const Register = () => {
     {isLoading ? <SpinnerLoader/> : null}
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="flex flex-col justify-center items-center w-full h-auto mt-16 px-16 mb-16 sm:px-32 md:px-32 mx-auto max-w-[1098px] "
+        className="flex flex-col justify-center items-center w-full h-auto mt-16 px-16 mb-16 sm:px-32 md:px-32 mx-auto max-w-[1024px] "
       >
          <Link to="/">
           <img src={logo} className="h-[80px]" alt="logo" />
@@ -73,7 +74,7 @@ const Register = () => {
             placeholder="First Name"
             id="firstName"
           />
-          <p className="text-[10px] h-6 text-red-600">
+          <p className="text-[12px] h-6 text-red-600">
             {errors.firstName && (errors.firstName.message as string)}
           </p>
         </div>
@@ -92,7 +93,7 @@ const Register = () => {
             placeholder="Last Name"
             id="lastName"
           />
-          <p className="text-[10px] h-6 text-red-600">
+          <p className="text-[12px] h-6 text-red-600">
             {errors.lastName && (errors.lastName.message as string)}
           </p>
         </div>
@@ -112,7 +113,7 @@ const Register = () => {
             placeholder="Email address"
             id="email"
           />
-          <p className="text-[10px] h-6 text-red-600">
+          <p className="text-[12px] h-6 text-red-600">
             {errors.email && (errors.email.message as string)}
           </p>
         </div>
@@ -135,11 +136,11 @@ const Register = () => {
               },
             })}
             className="h-10 w-full border border-gray-500 rounded-md pl-2 text-sm placeholder:text-sm"
-            type="text"
+            type="password"
             placeholder="Password"
             id="password"
           />
-          <p className="text-[10px] h-6 text-red-600">
+          <p className="text-[12px] h-6 text-red-600">
             {errors.password && (errors.password.message as string)}
           </p>
         </div>
@@ -151,11 +152,11 @@ const Register = () => {
                 value === password || "The passwords doesn't match",
             })}
             className="h-10 w-full border border-gray-500 rounded-md pl-2 text-sm placeholder:text-sm"
-            type="text"
+            type="password"
             placeholder="Confirm Password"
             id="confirmPassword"
           />
-          <p className="text-[10px] h-6 text-red-600">
+          <p className="text-[12px] h-6 text-red-600">
             {errors.confirmPassword &&
               (errors.confirmPassword.message as string)}
           </p>
@@ -177,7 +178,7 @@ const Register = () => {
             onChange={handleInputChange}
             value={birthDate}
           />
-          <p className="text-[10px] h-6 text-red-600">
+          <p className="text-[12px] h-6 text-red-600">
             {errors.birthday && (errors.birthday.message as string)}
           </p>
         </div>

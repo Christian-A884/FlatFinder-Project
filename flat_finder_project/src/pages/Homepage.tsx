@@ -37,11 +37,11 @@ const Homepage = () => {
     { header: "City", value: "city" },
     { header: "Street", value: "streetName" },
     { header: "Street number", value: "streetNumber" },
-    { header: "Area size", value: "areaSize" },
+    { header: "Area size (sqm)", value: "areaSize" },
     { header: "Has AC", value: "hasAC" },
     { header: "Built Year", value: "yearBuilt" },
-    { header: "Rent price", value: "rentPrice" },
-    { header: "Date available", value: "dateAvailable" },
+    { header: "Rent price (euro)", value: "rentPrice" },
+    { header: "Available from", value: "dateAvailable" },
   ];
 
   const getFlats = async () => {
@@ -160,7 +160,7 @@ const Homepage = () => {
                             : "bg-[#F1654D]"
                         }  p-1 rounded-md text-white font-semibold`}
                       >
-                        Favourite
+                        Favorite
                       </button>
                     </div>
                   </td>

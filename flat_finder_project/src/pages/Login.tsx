@@ -38,8 +38,8 @@ const Login = () => {
       setIsLoading(true);
       const userCredentials = await loginUser(data);
       setUserDetails(userCredentials);
-      console.log(userCredentials);
-      toast.success("You rules");
+     
+      toast.success("Login successfully");
       navigate("/");
     } catch (error) {
       toast.error("Something is wrong");
@@ -98,7 +98,7 @@ const Login = () => {
               },
             })}
             className="h-10 w-full border border-gray-500 rounded-md pl-2 text-sm placeholder:text-sm"
-            type="text"
+            type="password"
             placeholder="Password"
             id="password"
           />

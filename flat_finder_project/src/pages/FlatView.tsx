@@ -12,70 +12,67 @@ const FlatView = () => {
   const [currentFlat, setCurrentFlat] = useState<Flat | null>(null);
 
   const [allMessages, setAllMessages] = useState<Message[]>([]);
-  const [isLoading, setIsLoading] = useState(false)
-console.log(allMessages)
-  
-
+  const [isLoading, setIsLoading] = useState(false);
+ 
   const toggleFlatModal = () => {
     setFlatModal(!flatModal);
   };
 
   const id = useParams<{ flatId: string }>();
-  console.log(id)
+
 
   useEffect(() => {
-    
     async function getData() {
-      
-      if(id.flatId) {
-      try {
-        setIsLoading(true)
-        
-        const data = (await getFlatbyId(id.flatId)) as Flat;
-        setCurrentFlat(data);
+      if (id.flatId) {
+        try {
+          setIsLoading(true);
 
-        const messages = await getMessagesbyFlatId(id.flatId);
-        console.log(messages)
-        setAllMessages(messages);
-        
-        
-      } catch(error) {
-        toast.error(error.message);
+          const data = (await getFlatbyId(id.flatId)) as Flat;
+          setCurrentFlat(data);
+
+          const messages = await getMessagesbyFlatId(id.flatId);
+          console.log(messages);
+          setAllMessages(messages);
+        } catch (error) {
+          if (error instanceof Error) {
+          toast.error(error.message)}
+        } finally {
+          setIsLoading(false);
+        }
       }
-      finally{
-        setIsLoading(false)
-      }}
-      
     }
     getData();
-    
   }, []);
 
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
 
   return (
     <>
-    {isLoading && <SpinnerLoader/>}
+      {isLoading && <SpinnerLoader />}
       <div className=" flex flex-col w-full ">
         <div className="flex justify-items-center justify-self-center">
           {currentFlat ? (
-            <div className="flex flex-col w-[50%] justify-center items-center mt-28 mx-auto p-4 gap-10 border-none rounded-lg bg-[#F6F7FC]  shadow-md">
-              <div className="flex text-3xl font-bold text-[#173466]">
-                <h2>{`Mr ${currentFlat.ownerLastName} flat`}</h2>
+            <div className="flex w-[50%] justify-center items-center mt-28 mx-auto p-4 gap-10 mb-10 border-none rounded-lg bg-[#F6F7FC]  shadow-md">
+              <div className="w-[40%]">
+                <img src={currentFlat.flatImage} alt="image" />
               </div>
-              <div className="flex flex-col gap-2 text-xl text-[#173466] font-semibold">
-                <p>City: {currentFlat.city}</p>
-                <p>
-                  Adress: {currentFlat.streetName} street, no.{" "}
-                  {currentFlat.streetNumber}{" "}
-                </p>
-                <p>Has AC:</p>
-                <p>Built year: {currentFlat.yearBuilt}</p>
-                <p>Rent price: {currentFlat.rentPrice} $</p>
-                <p>Available date: {currentFlat.dateAvailable}</p>
-                <p></p>
-              </div>
-              {currentFlat.ownerId === loggedUser && (
+              <div>
+                <div className="flex text-3xl font-bold text-[#173466]">
+                  <h2>{`Mr ${currentFlat.ownerLastName} flat`}</h2>
+                </div>
+                <div className="flex flex-col gap-2 text-xl text-[#173466] font-semibold">
+                  <p>City: {currentFlat.city}</p>
+                  <p>
+                    Adress: {currentFlat.streetName} street, no.{" "}
+                    {currentFlat.streetNumber}{" "}
+                  </p>
+                  <p>Has AC: {currentFlat.hasAC}</p>
+                  <p>Built year: {currentFlat.yearBuilt}</p>
+                  <p>Rent price: {currentFlat.rentPrice} euro</p>
+                  <p>Available date: {currentFlat.dateAvailable}</p>
+                  <p></p>
+                </div>
+                {currentFlat.ownerId === loggedUser && (
                 <button
                   onClick={toggleFlatModal}
                   className="text-sm w-20 text-center bg-[#F1654D] p-2 rounded-md text-white font-semibold"
@@ -83,6 +80,9 @@ console.log(allMessages)
                   Edit Flat
                 </button>
               )}
+              </div>
+
+             
             </div>
           ) : (
             <div className="flex flex-col w-full justify-center items-center mt-28 mx-auto p-4 gap-10 border-none rounded-lg bg-[#F6F7FC]  shadow-md"></div>
@@ -116,7 +116,11 @@ console.log(allMessages)
         </div>
 
         {flatModal && (
-          <FlatModal currentFlat={currentFlat} setCurrentFlat={setCurrentFlat} closeModal={toggleFlatModal} />
+          <FlatModal
+            currentFlat={currentFlat}
+            setCurrentFlat={setCurrentFlat}
+            closeModal={toggleFlatModal}
+          />
         )}
       </div>
     </>

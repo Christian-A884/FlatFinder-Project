@@ -3,11 +3,16 @@ import { ChangeEvent } from "react";
 import { User } from "../interface";
 import SpinnerLoader from "./SpinnerLoader";
 
-const UserFilter = ({ users, setUsers }) => {
+interface UserFilterProps {
+  users: User[];
+  setUsers: React.Dispatch<React.SetStateAction<User[]>>;
+}
+
+const UserFilter = ({ users, setUsers }:UserFilterProps) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const [userFilter, setUserFilter] = useState({
-    userType: "User",
+    userType: "",
     minAge: "",
     maxAge: "",
     minFlat: "",
@@ -114,17 +119,17 @@ const UserFilter = ({ users, setUsers }) => {
   return (
     <>
       {isLoading && <SpinnerLoader />}
-      <div className="flex justify-center mdl:justify-start mdl:flex-col xl:flex-row gap-5 mt-10">
-        <div className="flex flex-col w-[30%] justify-start md:items-start mdl:flex-row mdl:w-[90%] px-4 gap-3 ">
+      <div className="flex justify-center md:flex-col md:justify-start xl:flex-row gap-5 mt-10">
+        <div className="flex flex-col w-full xs:w-[60%] justify-start md:items-start md:flex-row px-4 md:w-full mdl:w-[90%]  gap-3 ">
           <div className="flex flex-col text-sm gap-1">
             <label className="font-semibold text-[#F1654D]" htmlFor="userType">
               User Type:{" "}
             </label>
             <select
-              className="border text-gray-400 text-sm h-5 w-28 p-2"
+              className="border text-gray-400 text-sm h-5 w-28 px-2"
               name="userType"
               onChange={(e) => handleUserFilterChange(e)}
-              value=""
+              value={userFilter.userType}
             >
               <option value="" >Select an user type</option>
               <option value="Admin">Admin</option>
@@ -135,7 +140,7 @@ const UserFilter = ({ users, setUsers }) => {
             <label className="font-semibold text-[#F1654D]" htmlFor="minAge">
               Age range
             </label>
-            <div className="flex flex-col gap-2 mdl:flex-row">
+            <div className="flex flex-col gap-2 md:flex-row">
               <input
                 className="border placeholder: h-5 w-28 p-2"
                 name="minAge"
@@ -158,7 +163,7 @@ const UserFilter = ({ users, setUsers }) => {
             <label className="font-semibold text-[#F1654D]" htmlFor="minFlat">
               Added flats range
             </label>
-            <div className="flex flex-col mdl:flex-row gap-2">
+            <div className="flex flex-col md:flex-row gap-2">
               <input
                 className="border placeholder: h-5 w-28 p-2"
                 name="minflats"
@@ -186,14 +191,14 @@ const UserFilter = ({ users, setUsers }) => {
             </button>
             <button
               onClick={handleClearFilter}
-              className="text-[14px]  text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
+              className="text-[14px] text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
             >
               Clear filter
             </button>
           </div>
         </div>
 
-        <div className="flex flex-col justify-start items-center mdl:flex-row px-4 gap-3">
+        <div className="flex flex-col justify-start items-start w-full md:flex-row px-4 gap-3">
           <div className="flex flex-col text-sm gap-1">
             <label className="font-semibold text-[#F1654D]" htmlFor="minPrice">
               Sort by:
@@ -226,7 +231,7 @@ const UserFilter = ({ users, setUsers }) => {
           <div className="items-center justify-center">
             <button
               onClick={handleUserSort}
-              className="text-[14px] h-8 align-center justify-center text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
+              className="text-[14px] h-8 items-center justify-center text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold mt-2"
             >
               Sort
             </button>

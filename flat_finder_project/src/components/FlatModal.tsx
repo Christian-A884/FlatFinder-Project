@@ -5,8 +5,10 @@ import { updateFlat } from "../api/methods/flats/flats";
 import { useState } from "react";
 import { toast } from "react-toastify";
 import SpinnerLoader from "./SpinnerLoader";
+import { storage } from "../api/firebase/firebase.config";
+import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
-const FlatModal = ({ currentFlat, setCurrentFlat, closeModal }) => {
+const FlatModal = ({ currentFlat, setCurrentFlat, closeModal } : {currentFlat: Flat, setCurrentFlat: React.Dispatch<React.SetStateAction<Flat>>, closeModal:() => void}) => {
   const {
     register,
     handleSubmit,
@@ -16,13 +18,19 @@ const FlatModal = ({ currentFlat, setCurrentFlat, closeModal }) => {
 
   // const navigate = useNavigate();
   const onSubmit: SubmitHandler<Flat> = async (data) => {
+    const file = data.flatImage[0] || "";
+    const storageRef = ref(storage, `images/${file}`);
     try {
       setIsLoading(true);
       toast.info("Flat data is updating...");
-      await updateFlat(data);
-      setCurrentFlat(data)
+      await uploadBytes(storageRef, file);
+      const url = await getDownloadURL(storageRef);
+      const flatData = { ...data, flatImage: url };
+      await updateFlat(flatData);
+      setCurrentFlat(data);
+      closeModal();
+      window.location.reload();
       toast.success("Flat data updated");
-      closeModal()
     } catch (error) {
       toast.error("Produsul nu a putut fi adaugat");
     } finally {
@@ -31,8 +39,10 @@ const FlatModal = ({ currentFlat, setCurrentFlat, closeModal }) => {
   };
 
   return (
-    <> {isLoading ? <SpinnerLoader/> : null}
-      <div className="flex absolute w-[70%] h-[70%] align-center justify-center left-[50%] right-[50%] -translate-x-1/2 translate-y-[5%] translate mx-auto bg-white drop-shadow-lg rounded-2xl mb-4">
+    <>
+      {" "}
+      {isLoading ? <SpinnerLoader /> : null}
+      <div className="flex absolute w-[70%] h-auto align-center justify-center left-[50%] right-[50%] -translate-x-1/2 translate-y-[5%] translate mx-auto bg-white drop-shadow-lg rounded-2xl mb-4">
         <form
           onSubmit={handleSubmit(onSubmit)}
           className="flex flex-col justify-center items-center w-full h-full px-10 sm:px-28 md:px-52 mx-auto max-w-[1098px] "
@@ -164,16 +174,29 @@ const FlatModal = ({ currentFlat, setCurrentFlat, closeModal }) => {
               {errors.dateAvailable && errors.dateAvailable.message}
             </p>
           </div>
+          <div className="flex flex-col justify-center items-start w-full text-xs gap-1">
+            <label htmlFor="flatImage">Flat image</label>
+            <input
+              {...register("flatImage", {
+                required: { value: true, message: "This field is required" },
+              })}
+              type="file"
+              className="h-8 w-full border border-gray-500 rounded-md pl-2 text-xs placeholder:text-xs"
+            />
+            <p className="text-[10px] h-6 text-red-600">
+              {errors.flatImage && errors.flatImage.message}
+            </p>
+          </div>
           <div className="flex w-full gap-6 justify-between">
             <button
-              className="bg-[#F1654D] text-white text-xs  font-semibold w-[50%] h-8 rounded-md mb-4"
+              className="bg-[#F1654D] text-white text-lg hover:text-gray-200  font-semibold w-[50%] h-10 rounded-md mb-4"
               type="submit"
             >
               Update
             </button>
             <button
               onClick={closeModal}
-              className="bg-[#F1654D] text-white text-xs  font-semibold w-[50%] h-8 rounded-md mb-4"
+              className="bg-[#F1654D] text-white text-lg hover:text-gray-200  font-semibold w-[50%] h-10 rounded-md mb-4"
               type="submit"
             >
               Cancel

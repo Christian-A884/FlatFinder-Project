@@ -56,12 +56,12 @@ const EditProfileModal = ({ closeModal, currentUser, setCurrentUser }) => {
   return (
     <>
       {isLoading ? <SpinnerLoader /> : null}
-      <div className="flex absolute w-[70%] h-full align-center justify-center left-[50%] right-[50%] -translate-x-1/2 translate-y-[5%] translate mx-auto bg-white drop-shadow-lg rounded-2xl mb-4">
+      <div className="flex absolute w-[80%] h-full align-center justify-center left-[50%] right-[50%] -translate-x-1/2 translate-y-[5%] mx-auto bg-white drop-shadow-lg rounded-2xl ">
         <form
           onSubmit={handleSubmit(onSubmit)}
-          className="flex flex-col justify-center items-center w-full h-full px-10 mb-16 sm:px-32 md:px-52 mx-auto max-w-[1098px] "
+          className="flex flex-col justify-center items-center w-full h-full px-10 pb-4  md:px-36 lg:px-40 xl:px-52 mx-auto max-w-[1098px] "
         >
-          <h3 className="m-4 text-2xl text-center font-semibold">
+          <h3 className="mb-4 text-2xl text-center font-semibold">
             Create your account
           </h3>
           <div className="flex flex-col justify-center items-start w-full text-base gap-1">
