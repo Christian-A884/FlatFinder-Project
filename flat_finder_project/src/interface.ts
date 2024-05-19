@@ -1,16 +1,21 @@
+import { Timestamp } from "firebase/firestore";
+
 export interface User {
   uid: string;
   firstName: string;
   lastName: string;
   email: string;
   password: string;
-  confirmPassword:string;
+  confirmPassword: string;
   birthday: string;
-  role:string
+  role: string;
+  favourite: FavFlat[];
+  age: number;
+  userFlatCount: number;
 }
 
 export interface Flat {
-  id: string,
+  id: string;
   city: string;
   streetName: string;
   streetNumber: number;
@@ -19,7 +24,24 @@ export interface Flat {
   yearBuilt: number;
   rentPrice: number;
   dateAvailable: Date;
-  userLastName: string;
-  userFirstName: string;
-  userEmail: string
+  isFavourite: boolean;
+  ownerLastName: string;
+  ownerFirstName: string;
+  ownerEmail: string;
+  ownerId: string;
+  [key: string]: unknown;
+  flatImage: string
+}
+
+export interface FavFlat {
+  flatId: string;
+}
+
+export interface Message {
+  messageContent: string;
+  senderLastname: string;
+  senderFirstname: string;
+  senderEmail: string;
+  flatId: string;
+  date: Timestamp;
 }

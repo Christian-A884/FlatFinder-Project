@@ -8,26 +8,25 @@ import Register from "../pages/Register"
 import MyFlats from "../pages/MyFlats"
 import NewFlat from "../pages/NewFlat"
 import Profile from "../pages/Profile"
-import ProfileUpdate from "../pages/ProfileUpdate"
 import ResetPassword from '../pages/ResetPassword'
 import Navbar from "../components/Navbar"
 import NavMobile from "../components/NavMobile"
+import Footer from "../components/Footer"
 
 
 
 
 const AppRouter = () => {
-const routes = [
+  const routes = [
   {name: <Homepage/>, path:'/'},
   {name: <AllUsers/>, path:'/allusers'},
   {name: <Favourites/>, path:'/favourites'},
-  {name: <FlatView/>, path:'/flat-view'},
+  {name: <FlatView/>, path:'/flat-view/:flatId'},
   {name: <Login/>, path:'/login'},
   {name: <Register/>, path:'/register'},
   {name: <MyFlats/>, path:'/my-flats'},
   {name: <NewFlat/>, path:'/new-flat'},
-  {name: <Profile/>, path:'/profile'},
-  {name: <ProfileUpdate/>, path:'/profile-update'},
+  {name: <Profile/>, path: '/profile/:uid'},
   {name: <ResetPassword/>, path:'/reset-password'}
 
 ]
@@ -39,8 +38,8 @@ const routes = [
    <Navbar/>
    <Routes>
     {routes.map(({name, path})=> (<Route key={path} path={path} element={name} />))}
-    
    </Routes>
+   <Footer/>
    
    
    </BrowserRouter>
