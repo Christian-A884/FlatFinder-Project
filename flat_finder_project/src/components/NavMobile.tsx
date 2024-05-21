@@ -9,6 +9,8 @@ import { useContext } from "react";
 import { logoutUser } from "../api/methods/auth/users";
 import logo from "../assets/flatFinder.png";
 
+
+//syntax to display the some information from Navbar component but for smaller screens.
 const NavMobile = () => {
   const [isOpen, setIsOpen] = useState(false);
   const ref = useRef(null);
@@ -74,7 +76,7 @@ const NavMobile = () => {
             className="fixed h-full left-0 shadow-4xl right-0 top-[3.5rem] p-5 pt-0 bg-white  border-b border-b-white/20"
           >
             <ul className="grid gap-2">
-              {userDetails.role === "admin"
+              {userDetails.role === "Admin"
                 ? pageName.map((page, index) => (
                     <motion.li
                       initial={{ scale: 0, opacity: 0 }}

@@ -12,7 +12,7 @@ import { NavLink } from "react-router-dom";
 import UserFilter from "../components/UserFilter";
 import { UserDataContext } from "../provider/userDatacontext";
 
-
+//syntax used to display all users data.
 
 
 
@@ -20,9 +20,7 @@ const AllUsers = () => {
   const [users, setUsers] = useState<User>();
   const [isLoading, setIsLoading] = useState(false);
   const { userDetails } = useContext(UserDataContext);
-
   const navigate = useNavigate();
-  
 
   const getUsers = async () => {
     try {
@@ -40,8 +38,6 @@ const AllUsers = () => {
       setIsLoading(false);
     }
   };
-  // const normalUser = users.filter((user)=> user.role==="User")
-  // console.log(normalUser)
 
   const handleDeleteUser = async (id: string) => {
     console.log(id);
@@ -62,12 +58,16 @@ const AllUsers = () => {
     if (!JSON.parse(localStorage.getItem("loggedUser") as string)) {
       navigate("/login");
     }
-
-    if (userDetails.role !== "Admin") {
-      navigate("/");
+    if(userDetails.role) {
+      if (userDetails.role !== 'Admin') {
+        console.log(userDetails)
+        navigate("/");
+      }
     }
-    getUsers();
-  }, []);
+    
+    getUsers()
+    
+  }, [userDetails]);
 
   const handleMakeAdmin = async (currentUser: User) => {
     await updateUserRole(currentUser);
@@ -76,7 +76,7 @@ const AllUsers = () => {
   };
 
   return (
-    <>
+    <div className="min-h-[960px]">
       {isLoading && <SpinnerLoader />}
       <h1 className="text-center justify-cente text-[#173466] text-4xl font-bold mt-10">
         Users accounts
@@ -135,7 +135,7 @@ const AllUsers = () => {
             </div>
           ))}
       </div>
-    </>
+    </div>
   );
 };
 

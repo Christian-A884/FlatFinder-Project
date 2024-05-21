@@ -14,10 +14,12 @@ import { v4 as uuidv4 } from "uuid";
 import { FavFlat, Flat, Message } from "../../../interface";
 import { fetchUser } from "../auth/users";
 
+
+//function that create new documents in firebase flats collection, documents that contains flats data. The document name is the same with the flat id.
 export async function addNewFlat(flat: Flat) {
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
   const user = await fetchUser(loggedUser);
-  console.log(user);
+ 
 
   if (user) {
     const uid = uuidv4();
@@ -38,18 +40,18 @@ export async function addNewFlat(flat: Flat) {
       ownerId: user.uid,
       flatImage: flat.flatImage
     });
-    console.log("Flat added");
   } else {
     console.error("No user is logged in");
   }
 }
 
+// function which update a document from firebase flats collection, identified using a flat id as parameter
 export async function updateFlat(updatedFlat: Flat) {
   const flatRef = doc(db, "flats", updatedFlat.id as string);
-  console.log("Flat", updatedFlat);
   await updateDoc(flatRef, { ...updatedFlat });
 }
 
+// function that get all the flats from the firebase flats collection
 export async function showFlats() {
   const arr: DocumentData[] = [];
   const data = await getDocs(collection(db, "flats"));
@@ -59,20 +61,8 @@ export async function showFlats() {
   return arr;
 }
 
-// export async function getWantedFlat(flats: FavFlat[]) {
-//   const arr: DocumentData[] = [];
-//   flats.forEach(async (flat) => {
-//     const q = query(collection(db, "flats"), where("id", "==", flat.flatId));
-//     const data = await getDocs(q);
-//     data.forEach((doc) => {
-//       console.log(doc.data());
-//       arr.push(doc.data());
-//     });
-//   });
 
-//   return arr;
-// }
-
+// function that get all the flats data form firebase flats collection which fullfills the condition from syntax.
 export async function getWantedFlat(flats: FavFlat[]) {
   const promises = flats.map((flat) => {
     const q = query(collection(db, "flats"), where("id", "==", flat.flatId));
@@ -83,13 +73,14 @@ export async function getWantedFlat(flats: FavFlat[]) {
 
   docsArray.forEach((docs) => {
     docs.forEach((doc) => {
-      console.log(doc.data());
       arr.push(doc.data());
     });
   });
 
   return arr;
 }
+
+// function that create, inside an user document from firebase users collection, a new field, favorite, as an array of strings which contains flats id from all the flats that a specific user add to favorite.This function also creates a localstorage array of objects with the same data as favorite firebase field.
 export async function addFavouriteFlat(flats: FavFlat[], newFlat: FavFlat) {
   const index = flats.findIndex((flat) => flat.flatId === newFlat.flatId);
 
@@ -109,6 +100,8 @@ export async function addFavouriteFlat(flats: FavFlat[], newFlat: FavFlat) {
   return newFavFlat;
 }
 
+// function that remove from the data form favorite firebase field from users collection and also from local storage array, favflat
+
 export async function removeFavouriteFlat(id:string, flats: []) {
   const filtered = flats.filter((item:FavFlat) => item.flatId !== id)
   const user_id=JSON.parse(localStorage.getItem("loggedUser")as string)
@@ -121,6 +114,7 @@ export async function removeFavouriteFlat(id:string, flats: []) {
   return newFavFlat
 }
 
+//function that helps to provide data from a specific flat identified by flat id
 export async function getFlatbyId(flatId: string) {
   try {
     const q = query(collection(db, "flats"), where("id", "==", flatId));
@@ -137,6 +131,7 @@ export async function getFlatbyId(flatId: string) {
   }
 }
 
+//function that help to provide all the flats from flats collection wich IDs are similar with flatIds from favFlat local storage array of objects
 export async function getFlatsbyFlatId(flats: Flat[]) {
   const promises = flats.map((flat) => {
     const q = query(collection(db, "flats"), where("id", "==", flat.flatId));
@@ -147,7 +142,6 @@ export async function getFlatsbyFlatId(flats: Flat[]) {
 
   docsArray.forEach((docs) => {
     docs.forEach((doc) => {
-      console.log(doc.data());
       arr.push(doc.data());
     });
   });
@@ -156,6 +150,7 @@ export async function getFlatsbyFlatId(flats: Flat[]) {
    
 }
 
+// function that help to get all the messages, stored in firebase messages collection, sent by users for a specific flat.
 export async function getMessagesbyFlatId(flatId: string) {
   try {
     const q = query(collection(db, "messages"), where("flatId", "==", flatId))
@@ -174,7 +169,7 @@ export async function getMessagesbyFlatId(flatId: string) {
     }
 }}
 
-
+// function that help to get all the flats that was added by a user
 export async function getFlatsbyOwnerId(userId: string) {
   try {
     const q = query(collection(db, "flats"), where("ownerId", "==", userId))
@@ -193,8 +188,9 @@ export async function getFlatsbyOwnerId(userId: string) {
     }
 }}
 
+// function that help to delete a specific flat form firebase flats collection
 export async function deleteFlat(flatReference: string) {
   const flatRef = doc(db, "flats", flatReference);
   await deleteDoc(flatRef);
-  console.log("deleted");
+  
 }

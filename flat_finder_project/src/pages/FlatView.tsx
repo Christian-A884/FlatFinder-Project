@@ -7,6 +7,8 @@ import { getFlatbyId, getMessagesbyFlatId } from "../api/methods/flats/flats";
 import SpinnerLoader from "../components/SpinnerLoader";
 import { toast } from "react-toastify";
 
+
+//syntax to display a specific flat information and also display messages received a the flat owner from other users or to send a message to the flat owner
 const FlatView = () => {
   const [flatModal, setFlatModal] = useState(false);
   const [currentFlat, setCurrentFlat] = useState<Flat | null>(null);
@@ -31,7 +33,6 @@ const FlatView = () => {
           setCurrentFlat(data);
 
           const messages = await getMessagesbyFlatId(id.flatId);
-          console.log(messages);
           setAllMessages(messages);
         } catch (error) {
           if (error instanceof Error) {
@@ -49,10 +50,10 @@ const FlatView = () => {
   return (
     <>
       {isLoading && <SpinnerLoader />}
-      <div className=" flex flex-col w-full ">
+      <div className=" flex flex-col w-full h-[960px] justify-center ">
         <div className="flex justify-items-center justify-self-center">
           {currentFlat ? (
-            <div className="flex w-[50%] justify-center items-center mt-28 mx-auto p-4 gap-10 mb-10 border-none rounded-lg bg-[#F6F7FC]  shadow-md">
+            <div className="flex w-[50%] justify-center items-center mx-auto p-4 gap-10 mb-10 border-none rounded-lg bg-[#F6F7FC]  shadow-md">
               <div className="w-[40%]">
                 <img src={currentFlat.flatImage} alt="image" />
               </div>
@@ -85,7 +86,7 @@ const FlatView = () => {
              
             </div>
           ) : (
-            <div className="flex flex-col w-full justify-center items-center mt-28 mx-auto p-4 gap-10 border-none rounded-lg bg-[#F6F7FC]  shadow-md"></div>
+            <div className="flex flex-col w-full justify-center items-center  mx-auto p-4 gap-10 border-none rounded-lg bg-[#F6F7FC]  shadow-md"></div>
           )}
           <div>
             {currentFlat && currentFlat.ownerId !== loggedUser ? (
@@ -94,7 +95,7 @@ const FlatView = () => {
               allMessages.map((message, index) => (
                 <div
                   key={index}
-                  className="flex flex-col h-[30%] w-[70%] justify-center items-start mt-10 mx-auto gap-2 border-none rounded-lg bg-[#F6F7FC]  shadow-md"
+                  className="flex flex-col min-h-[40%] w-[70%] justify-center items-start mt-10 mx-auto gap-2 border-none rounded-lg bg-[#F6F7FC]  shadow-md"
                 >
                   <p className="text-sm text-[#173466] font-semibold pl-3">
                     Message date: {message.date.toDate().toString()}

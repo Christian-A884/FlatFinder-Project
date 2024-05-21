@@ -4,11 +4,11 @@ import {User} from "../interface"
 
 
 interface UserDataContextProps {
-  userDetails: User | null;
-  setUserDetails: React.Dispatch<React.SetStateAction<User | null>>;
+  userDetails: User
+  setUserDetails: React.Dispatch<React.SetStateAction<User>>;
 }
 
 export const UserDataContext = createContext<UserDataContextProps>({
-  userDetails:null,
+  userDetails:{} as User,
   setUserDetails: () => {},
 });

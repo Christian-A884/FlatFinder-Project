@@ -7,7 +7,7 @@ import { useNavigate } from "react-router";
 import { toast } from "react-toastify";
 import SpinnerLoader from "../components/SpinnerLoader";
 
-
+//syntax that is used for updating data for a specific user. Data are collected using a form speific for react hook form library
 const EditProfileModal = ({ closeModal, currentUser, setCurrentUser }) => {
   const [isLoading, setIsLoading] = useState(false);
   const {
@@ -26,6 +26,7 @@ const EditProfileModal = ({ closeModal, currentUser, setCurrentUser }) => {
       await updateUser(data);
       setCurrentUser(data)
       closeModal()
+      navigate(0)
       toast.success("Your account is updated");
     } catch (error) {
       toast.error("Your email address is already used");
@@ -47,7 +48,7 @@ const EditProfileModal = ({ closeModal, currentUser, setCurrentUser }) => {
     return ageResult;
   }
 
-  // console.log(calculateAge('01.01.1983'))
+
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setBirthDate(e.target.value);
@@ -62,7 +63,7 @@ const EditProfileModal = ({ closeModal, currentUser, setCurrentUser }) => {
           className="flex flex-col justify-center items-center w-full h-full px-10 pb-4  md:px-36 lg:px-40 xl:px-52 mx-auto max-w-[1098px] "
         >
           <h3 className="mb-4 text-2xl text-center font-semibold">
-            Create your account
+            Update your account
           </h3>
           <div className="flex flex-col justify-center items-start w-full text-base gap-1">
             <label htmlFor="firstName">Firstname</label>
@@ -133,9 +134,6 @@ const EditProfileModal = ({ closeModal, currentUser, setCurrentUser }) => {
                 },
                 pattern: {
                   value: /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{6,}$/,
-
-                  // /^(?=.*[a-zA-Z])(?=.*\d)(?=.*[@#$%^&*!])[a-zA-Z\d@#$%^&*!]{6,}$/,
-
                   message:
                     "Password must contain at least one uppercase letter,one number and one special character",
                 },
@@ -170,8 +168,6 @@ const EditProfileModal = ({ closeModal, currentUser, setCurrentUser }) => {
             <label htmlFor="birthday">Birthday</label>
             <input
               {...register("birthday", {
-                required: "This field is required",
-
                 validate: (value) =>
                   (calculateAge(value) >= 18 && calculateAge(value) <= 120) ||
                   "Age must be between 18 and 120 years old",

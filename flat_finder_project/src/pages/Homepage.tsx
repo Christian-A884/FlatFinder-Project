@@ -12,23 +12,16 @@ import FlatFilter from "../components/FlatFilter";
 import SpinnerLoader from "../components/SpinnerLoader";
 import { toast } from "react-toastify";
 
+
+//this is the code for homepage which dispaly all the flats from the platform and has different functionality like: a link to the flat page, a button to add a flat to favorite or remove it from favorite, filter and sort functionality added by FlatFilter component
+
 const Homepage = () => {
   const { flat, setFlat } = useContext(FlatContext);
   const [favFlat, setFavFlat] = useState<FavFlat[]>([]);
   const [isLoading, setIsLoading] = useState(false);
-  console.log(flat);
-  console.log(favFlat);
+
 
   const navigate = useNavigate();
-
-  // useEffect(() => {
-  //   getFlats();
-  //   const favFlats = JSON.parse(
-  //     (localStorage.getItem("favFlat") as string) || "[]"
-  //   );
-  //   setFavFlat(favFlats)
-  //   // getUsers();
-  // }, []);
 
   const column = [
     { header: "Owner Firstname", value: "ownerFirstName" },
@@ -48,7 +41,6 @@ const Homepage = () => {
     try {
       setIsLoading(true);
       const showAllFlats = await showFlats();
-      console.log("Flat", showAllFlats);
       setFlat(showAllFlats as Flat[]);
     } catch (error) {
       if (error instanceof Error) {
@@ -87,10 +79,6 @@ const Homepage = () => {
     }
   };
 
-  // const getUsers = async () => {
-  //   const users = await getAllUsers();
-  //   console.log(users);
-  // };
 
   useEffect(() => {
     if (!JSON.parse(localStorage.getItem("loggedUser") as string)) {
@@ -101,15 +89,14 @@ const Homepage = () => {
       (localStorage.getItem("favFlat") as string) || "[]"
     );
     setFavFlat(favFlats);
-    // getUsers();
   }, []);
 
   return (
     <>
       {isLoading && <SpinnerLoader />}
-      <div className="overflow-x-scroll mt-16">
+      <div className="overflow-x-scroll mt-16 h-[960px]">
         <FlatFilter />
-        <table className="mx-auto my-7 w-full h-auto border-spacing-4 table-auto shadow-lg ">
+        <table className="mx-auto my-7 w-full border-spacing-4 table-auto shadow-lg ">
           <thead>
             <tr>
               {column.map((item, index) => (

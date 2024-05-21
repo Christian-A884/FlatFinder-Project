@@ -5,6 +5,7 @@ import SpinnerLoader from "../components/SpinnerLoader";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router";
 
+//syntax used to display all user's favorite flats
 
 const Favourites = () => {
   const [isLoading, setIsLoading] = useState(false)
@@ -45,7 +46,6 @@ const Favourites = () => {
       getUserFavouriteFlats()
     },[])
 
-    console.log(userFavFlats)
 
     const handleRemoveFavFlat=async(flatId:string) => {
       try {
@@ -69,7 +69,7 @@ const Favourites = () => {
     <>
     {isLoading && <SpinnerLoader />}
     {userFavFlats.length ? ( 
-     <div className="overflow-x-scroll mt-16">
+     <div className="overflow-x-scroll mt-16 h-[960px]">
       
        <table className="mx-auto my-7 w-full h-auto border-spacing-4 table-auto shadow-lg ">
          <thead>

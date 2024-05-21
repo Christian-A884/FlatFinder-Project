@@ -6,6 +6,7 @@ import SpinnerLoader from "../components/SpinnerLoader";
 import { UserDataContext } from "../provider/userDatacontext";
 import { updateUser } from "../api/methods/auth/users";
 
+//this syntax help to display all the flats that an user added to the platform and also a link to the page where an user can add a new flat. Also this page has a delete flat button for each flat.
 
 const MyFlats = () => {
   const [userFlats, setUserFlats] = useState<Flat[]>([]);
@@ -66,13 +67,12 @@ const MyFlats = () => {
     { header: "Available from", value: "dateAvailable" },
   ];
 
-  // const userFlats = flat.filter((flt) => flt.)
 
   return (
     <>
       {isLoading && <SpinnerLoader />}
       {userFlats.length ? (
-      <div className="overflow-x-scroll mt-16">
+      <div className="overflow-x-scroll mt-16 h-[906px]">
         <table className="mx-auto my-7 w-[95%] h-auto border-spacing-4 table-auto shadow-lg ">
           <thead>
             <tr>

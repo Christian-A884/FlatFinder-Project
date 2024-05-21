@@ -3,6 +3,8 @@ import { FlatContext } from "../provider/flatcontext";
 import { Flat } from "../interface";
 import SpinnerLoader from "./SpinnerLoader";
 
+
+//this syntax is used to filter and/or sort flats form the flats showed in the homepage table
 const FlatFilter = () => {
   const { flat, setFlat } = useContext(FlatContext);
   const [isLoading, setIsLoading] = useState(false);
@@ -89,13 +91,6 @@ const FlatFilter = () => {
       setFlat(filterFlat(flat));
       setIsLoading(false);
     }, 1000);
-    // try {
-    //   setIsLoading(true);
-    //   setFlat(filterFlat(flat));
-    //   console.log("filtered");
-    // } finally {
-    //   setIsLoading(false);
-    // }
   };
 
   const handleClearFilter = () => {
@@ -104,7 +99,6 @@ const FlatFilter = () => {
 
   const handleFlatSort = () => {
     setFlat(sortFlat(flat));
-    console.log("sorted", sortFlat(flat));
   };
 
   return (
@@ -174,13 +168,13 @@ const FlatFilter = () => {
           <div className="flex gap-3 w-40 mdl:items-center mdl:justify-center mdl:p-2">
             <button
               onClick={handleFlatFilter}
-              className=" text-[12px] mdl:text-[14px] text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
+              className=" text-[12px] mdl:text-[14px] text-center bg-[#F1654D] p-1 mt-2 rounded-md text-white font-semibold"
             >
               Filter
             </button>
             <button
               onClick={handleClearFilter}
-              className="text-[12px] mdl:text-[14px] w-22 text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
+              className="text-[12px] mdl:text-[14px] w-22 text-center bg-[#F1654D] p-1 mt-2 rounded-md text-white font-semibold"
             >
               Clear filter
             </button>
@@ -219,7 +213,7 @@ const FlatFilter = () => {
           </div>
           <button
             onClick={handleFlatSort}
-            className="text-[14px] h-8 align-center justify-center text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
+            className="text-[14px] h-8 align-center justify-center text-center bg-[#F1654D] p-1 mt-2 rounded-md text-white font-semibold"
           >
             Sort
           </button>

@@ -5,6 +5,8 @@ import { UserDataContext } from "../provider/userDatacontext";
 import { logoutUser } from "../api/methods/auth/users";
 import { useEffect } from "react";
 
+
+//syntax used to display information on navbar displayed on the top of each page (information tha contains logged user name, shorcuts to different pages and "Delete account"  and "Logiut" buttons)
 const Navbar = () => {
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
   const pageName = [
@@ -20,7 +22,7 @@ const Navbar = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const isMyFlatsPage = location.pathname === "/my-flats";
-
+  
   const handleLogout = async () => {
     await logoutUser();
     localStorage.removeItem("loggedUser");
@@ -63,7 +65,7 @@ const Navbar = () => {
             ? pageName.map((page, index) => (
                 <li
                   key={index}
-                  className="flex text-lg text-[#a2aaad] font-semibold"
+                  className="flex text-lg text-[#a2aaad] font-semibold hover:opacity-60"
                 >
                   <NavLink to={page.path}>{page.page}</NavLink>
                 </li>
@@ -91,16 +93,16 @@ const Navbar = () => {
             {isMyFlatsPage && (
               <Link
                 to={"/new-flat"}
-                className="text-xs border p-1 bg-[#F1654D] border-none rounded-md text-[#F6F7FC] font-semibold"
+                className="text-xs border p-1 bg-[#F1654D] border-none rounded-md text-[#F6F7FC] font-semibold hover:text-gray-200"
               >
                 + New Flat
               </Link>
             )}
-            <button className="text-xs border p-1 bg-[#F1654D] border-none rounded-md text-[#F6F7FC] font-semibold">
+            <button className="text-xs border p-1 bg-[#F1654D] border-none rounded-md text-[#F6F7FC] font-semibold hover:text-gray-200">
               Delete Account
             </button>
             <button
-              className="text-xs border p-1 bg-[#F1654D] border-none rounded-md text-[#F6F7FC] font-semibold"
+              className="text-xs border p-1 bg-[#F1654D] border-none rounded-md text-[#F6F7FC] font-semibold hover:text-gray-200"
               onClick={handleLogout}
             >
               Logout

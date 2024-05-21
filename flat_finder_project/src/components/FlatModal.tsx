@@ -8,6 +8,8 @@ import SpinnerLoader from "./SpinnerLoader";
 import { storage } from "../api/firebase/firebase.config";
 import { ref, getDownloadURL, uploadBytes } from "firebase/storage";
 
+
+//this is a syntax that collect data form the from which is created using react hook form library and also to update a specific flat data from firebase flats collection 
 const FlatModal = ({ currentFlat, setCurrentFlat, closeModal } : {currentFlat: Flat, setCurrentFlat: React.Dispatch<React.SetStateAction<Flat>>, closeModal:() => void}) => {
   const {
     register,
@@ -16,7 +18,6 @@ const FlatModal = ({ currentFlat, setCurrentFlat, closeModal } : {currentFlat: F
   } = useForm<Flat>({ defaultValues: currentFlat });
   const [isLoading, setIsLoading] = useState(false);
 
-  // const navigate = useNavigate();
   const onSubmit: SubmitHandler<Flat> = async (data) => {
     const file = data.flatImage[0] || "";
     const storageRef = ref(storage, `images/${file}`);

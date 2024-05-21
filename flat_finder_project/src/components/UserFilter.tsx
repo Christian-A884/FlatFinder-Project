@@ -2,6 +2,9 @@ import { useState } from "react";
 import { ChangeEvent } from "react";
 import { User } from "../interface";
 import SpinnerLoader from "./SpinnerLoader";
+import { useNavigate } from "react-router";
+
+//syntax which shows a form that is used to collect user data that will be updated in firebase users collection, for a specific user
 
 interface UserFilterProps {
   users: User[];
@@ -23,12 +26,11 @@ const UserFilter = ({ users, setUsers }:UserFilterProps) => {
     criteria: "Lastname",
     order: "Ascending",
   });
-
+  const navigate = useNavigate()
   const handleUserFilterChange = (
     e: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
-    console.log(`Changing ${name} to ${value}`);
     setUserFilter((prevState) => ({
       ...prevState,
       [name]: value,
@@ -98,17 +100,10 @@ const UserFilter = ({ users, setUsers }:UserFilterProps) => {
       setUsers(filterUser(users));
       setIsLoading(false);
     }, 1000);
-    // try {
-    //   setIsLoading(true);
-    //   setFlat(filterFlat(flat));
-    //   console.log("filtered");
-    // } finally {
-    //   setIsLoading(false);
-    // }
   };
 
   const handleClearFilter = () => {
-    window.location.reload();
+    navigate(0)
   };
 
   const handleUserSort = () => {
@@ -185,13 +180,13 @@ const UserFilter = ({ users, setUsers }:UserFilterProps) => {
           <div className="flex gap-3 w-40 mdl:items-center mdl:justify-center mdl:p-2">
             <button
               onClick={handleUserFilter}
-              className="text-[14px] text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
+              className="text-[14px] text-center bg-[#F1654D] p-1 mt-2 rounded-md text-white font-semibold"
             >
               Filter
             </button>
             <button
               onClick={handleClearFilter}
-              className="text-[14px] text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold"
+              className="text-[14px] text-center bg-[#F1654D] p-1 mt-2 rounded-md text-white font-semibold"
             >
               Clear filter
             </button>
@@ -231,7 +226,7 @@ const UserFilter = ({ users, setUsers }:UserFilterProps) => {
           <div className="items-center justify-center">
             <button
               onClick={handleUserSort}
-              className="text-[14px] h-8 items-center justify-center text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold mt-2"
+              className="text-[14px] h-8 items-center justify-center text-center bg-[#F1654D] p-1 rounded-md text-white font-semibold mt-3"
             >
               Sort
             </button>

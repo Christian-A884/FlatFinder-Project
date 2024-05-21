@@ -18,6 +18,8 @@ import {
 } from "firebase/firestore";
 import { signOut } from "firebase/auth";
 
+
+// function which has as a result user age based on his birthday
 export default function calculateUserAge(birthDate: string) {
   const currentDate = new Date();
   const birthday = new Date(birthDate);
@@ -31,7 +33,7 @@ export default function calculateUserAge(birthDate: string) {
 
 export async function registerUser(userData: User) {
   try {
-    //* cream userul in authentication
+    //* create user in firestore auth
     const userCredentials = await createUserWithEmailAndPassword(
       auth,
       userData.email,
@@ -39,7 +41,7 @@ export async function registerUser(userData: User) {
     );
     console.log("User registered", userCredentials);
 
-    //* stocam in firestore datele utilizatorului folosindu-ne de uid-ul obtinut din authentication
+    //* store user data in firebase using uid-ul generated from  authentication
     await setDoc(doc(db, "users", userCredentials.user.uid), {
       uid: userCredentials.user.uid,
       firstName: userData.firstName,
@@ -50,12 +52,16 @@ export async function registerUser(userData: User) {
       favourite: [],
       age: calculateUserAge(userData.birthday)
     });
-    console.log("User registered");
   } catch (error: unknown) {
-    throw new Error(error)
+    if (error instanceof Error) {
+      throw new Error;
+    } else {
+      console.error(error);
+    }
   }
 }
 
+// function ude for use login
 export async function loginUser(userData: User) {
   const userCredentials = await signInWithEmailAndPassword(
     auth,
@@ -63,29 +69,15 @@ export async function loginUser(userData: User) {
     userData.password
   );
   return fetchUser(userCredentials.user.uid);
-
-  //   const docRef = doc(db, "users", userCredentials.user.uid);
-  //   const docSnap = await getDoc(docRef);
-  //   if (docSnap) {
-  //     console.log("User data", docSnap.data());
-
-  //     localStorage.setItem("loggedUser", JSON.stringify(docSnap.data().uid as string))
-  //     return docSnap.data()
-  //   } else {
-  //     ("User does not exist");
-  //   }
-  // } catch (error) {
-  //   console.error("Error auth user", error);
-  // }
 }
 
+
+// fucntion which get the user data from firebase "users" collection using an user id as parameter. It also create in local storage an object with the uid of the logged in user and an array of the favorite logged user flats (contains objects of favorite user fltas id)
 export async function fetchUser(id: string) {
   try {
     const docRef = doc(db, "users", id);
     const docSnap = await getDoc(docRef);
     if (docSnap) {
-      console.log("User data", docSnap.data());
-
       localStorage.setItem("loggedUser", JSON.stringify(docSnap.data()?.uid));
       localStorage.setItem("favFlat",JSON.stringify(docSnap.data().favourite))
       return docSnap.data();
@@ -93,10 +85,16 @@ export async function fetchUser(id: string) {
       ("User does not exist");
     }
   } catch (error) {
-    throw new Error(error as string);
+    if (error instanceof Error) {
+      throw new Error;
+    } else {
+      console.error(error);
+    }
   }
 }
 
+
+//this function take the data of logged user from firebase
 export async function getUser() {
   const loggedUser = JSON.parse(localStorage.getItem("loggedUser") as string);
 
@@ -104,20 +102,21 @@ export async function getUser() {
   return user;
 }
 
+// function for user logout
 export async function logoutUser() {
   signOut(auth);
 }
-
+//function which create an array of objects of user data from users collection from firebase
 export async function getAllUsers() {
   const arr: DocumentData[] = [];
   const data = await getDocs(collection(db, "users"));
   data.forEach((doc) => {
     arr.push(doc.data());
-    console.log(doc.data())
   });
   return arr;
 }
 
+// function which provide a spesific user data object from firebase users collection, using an user id as parameter
 export async function getUserbyId(id: string) {
   try{
     const q = query(collection(db, "users"), where("uid", "==", id))
@@ -134,18 +133,21 @@ export async function getUserbyId(id: string) {
 
 }
 
+// function wich update all the user data object from firebase users collection, for a specific user
 export async function updateUser (updatedUser: User) {
   const userRef = doc(db,"users", updatedUser.uid as string)
   console.log('User update', updatedUser)
   await updateDoc(userRef, {...updatedUser})
 }
 
+// function which update the role key value for a specific user
 export async function updateUserRole (user:User) {
   const userRef = doc(db,"users", user.uid as string)
   const newRole = user.role === "Admin" ? "User" : "Admin"
   await updateDoc(userRef, {role: newRole})
 }
 
+//function which delete all the data for a specific user from firebase users collection
 export async function deleteUser(userReference: string) {
   const userRef = doc(db, "users", userReference);
   await deleteDoc(userRef);
